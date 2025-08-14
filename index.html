@@ -435,7 +435,7 @@
         
         const workflowId = scheduleWorkflow.id;
         
-        // 2. 触发工作流
+        // 2. 触发工作流 - 关键修改：添加task参数
         const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`;
         
         const dispatchResponse = await fetch(dispatchUrl, {
@@ -447,7 +447,9 @@
           },
           body: JSON.stringify({
             ref: 'main',
-            inputs: { task }
+            inputs: { 
+              task: task  // 这里添加task参数
+            }
           })
         });
         

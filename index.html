@@ -247,55 +247,64 @@
     <h2>🚀 第二步：选择任务</h2>
     
     <div class="task">
-      <h3>测试消息推送 (T01)</h3>
+      <h3>【T01】手动推送微信消息 </h3>
       <p>发送测试消息到企业微信，验证消息通道是否正常</p>
       <button onclick="triggerTest('test_message')">
-        <span class="icon">📤</span> 触发测试
+        <span class="icon">📤</span> 点击触发测试
       </button>
       <div id="test_message_status" class="status"></div>
     </div>
     
     <div class="task">
-      <h3>测试新股信息 (T07)</h3>
-      <p>推送当天可申购的新股及新上市交易股票信息</p>
-      <button onclick="triggerTest('test_new_stock')">
-        <span class="icon">💹</span> 触发测试
-      </button>
-      <div id="test_new_stock_status" class="status"></div>
-    </div>
-    
-    <div class="task">
-      <h3>测试股票池推送 (T04)</h3>
+      <h3>【T04】手动推送当前股票池</h3>
       <p>推送当前有效的ETF股票池到微信</p>
       <button onclick="triggerTest('test_stock_pool')">
-        <span class="icon">📊</span> 触发测试
+        <span class="icon">📊</span> 点击触发测试
       </button>
       <div id="test_stock_pool_status" class="status"></div>
     </div>
     
     <div class="task">
-      <h3>测试策略推送 (T05)</h3>
+      <h3>【T05】手动执行策略并推送结果</h3>
       <p>执行策略计算并推送买卖信号到微信</p>
       <button onclick="triggerTest('test_execute')">
-        <span class="icon">🤖</span> 触发测试
+        <span class="icon">🤖</span> 点击触发测试
       </button>
       <div id="test_execute_status" class="status"></div>
     </div>
     
     <div class="task">
-      <h3>重置所有仓位 (T06)</h3>
+      <h3>【T06】手动重置所有仓位</h3>
       <p>将所有ETF仓位重置为0%，用于测试</p>
       <button onclick="triggerTest('test_reset')">
-        <span class="icon">🔄</span> 触发测试
+        <span class="icon">🔄</span> 点击触发测试
       </button>
       <div id="test_reset_status" class="status"></div>
     </div>
+
+    <div class="task">
+      <h3>【T07】手动推送新股信息</h3>
+      <p>推送当天/或7天回溯可申购的股票信息</p>
+      <button onclick="triggerTest('test_new_stock')">
+        <span class="icon">💹</span> 点击触发测试
+      </button>
+      <div id="test_new_stock_status" class="status"></div>
+    </div>
+
+    <div class="task">
+      <h3>【T08】手动推送新上市股票信息</h3>
+      <p>推送当天/或7天回溯新上市交易的股票信息</p>
+      <button onclick="triggerTest('test_new_stock_listings')">
+        <span class="icon">💹</span> 点击触发测试
+      </button>
+      <div id="test_new_stock_listings_status" class="status"></div>
+    </div>
     
     <div class="task">
-      <h3>测试套利扫描 (T09)</h3>
+      <h3>【T09】手动套利扫描</h3>
       <p>扫描并推送ETF套利机会到微信</p>
       <button onclick="triggerTest('test_arbitrage')">
-        <span class="icon">🔍</span> 触发测试
+        <span class="icon">🔍</span> 点击触发测试
       </button>
       <div id="test_arbitrage_status" class="status"></div>
     </div>

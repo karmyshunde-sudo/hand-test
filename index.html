@@ -1,500 +1,276 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <title>DS08141210鱼盆ETF策略触发器</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      max-width: 800px; 
-      margin: 0 auto; 
-      padding: 20px; 
-      line-height: 1.6;
-      color: #333;
-      background: #f5f7fa;
-    }
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-      border-bottom: 2px solid #3498db;
-      padding-bottom: 15px;
-      margin-bottom: 30px;
-    }
-    .container { 
-      background: white; 
-      padding: 25px; 
-      border-radius: 10px; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 30px;
-    }
-    .config-section {
-      background: #e8f4fc;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 25px;
-      border-left: 4px solid #3498db;
-    }
-    .task { 
-      margin-bottom: 20px; 
-      padding: 20px; 
-      background: white; 
-      border: 1px solid #e0e6ed; 
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .task:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      border-color: #3498db;
-    }
-    .task h3 {
-      color: #2c3e50;
-      margin-top: 0;
-      display: flex;
-      align-items: center;
-    }
-    .task h3:before {
-      content: "•";
-      color: #3498db;
-      font-size: 24px;
-      margin-right: 10px;
-    }
-    .task p {
-      color: #5a6a7f;
-      margin: 10px 0 15px;
-    }
-    button { 
-      padding: 12px 25px; 
-      background: #3498db; 
-      color: white; 
-      border: none; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      font-size: 16px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-    }
-    button:hover { 
-      background: #2980b9; 
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
-    }
-    button:disabled {
-      background: #bdc3c7;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    button .icon {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-    .status { 
-      margin-top: 15px; 
-      padding: 12px; 
-      border-radius: 6px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-    .success {
-      background-color: #d5f5e3;
-      color: #27ae60;
-      border-left: 4px solid #27ae60;
-    }
-    .error {
-      background-color: #fadbd8;
-      color: #c0392b;
-      border-left: 4px solid #c0392b;
-    }
-    .info {
-      background-color: #d6eaf8;
-      color: #2980b9;
-      border-left: 4px solid #2980b9;
-    }
-    .loading {
-      background-color: #f0f3f7;
-      color: #7f8c8d;
-      border-left: 4px solid #7f8c8d;
-      display: flex;
-      align-items: center;
-    }
-    .loading-spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(127, 140, 141, 0.2);
-      border-top: 3px solid #7f8c8d;
-      border-radius: 50%;
-      margin-right: 10px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .input-group { 
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      transition: all 0.3s;
-    }
-    input:focus {
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-      outline: none;
-    }
-    .help-text {
-      font-size: 14px;
-      color: #7f8c8d;
-      margin-top: 6px;
-    }
-    .instructions {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 30px;
-      border-left: 4px solid #f1c40f;
-    }
-    .instructions h3 {
-      color: #2c3e50;
-      margin-top: 0;
-      display: flex;
-      align-items: center;
-    }
-    .instructions h3:before {
-      content: "🛈";
-      margin-right: 10px;
-      font-size: 20px;
-    }
-    .instructions ol {
-      padding-left: 20px;
-    }
-    .instructions li {
-      margin-bottom: 15px;
-      line-height: 1.5;
-    }
-    .instructions code {
-      background: #e8f4fc;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      color: #7f8c8d;
-      font-size: 14px;
-      padding-top: 20px;
-      border-top: 1px solid #ecf0f1;
-    }
-    .step-number {
-      display: inline-block;
-      width: 25px;
-      height: 25px;
-      background: #3498db;
-      color: white;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 25px;
-      margin-right: 10px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS08141210鱼盆ETF策略触发器</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; background: #f5f7fa; }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 15px; margin-bottom: 30px; }
+        .container { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .config-section { background: #e8f4fc; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #3498db; }
+        .task { margin-bottom: 20px; padding: 20px; background: white; border: 1px solid #e0e6ed; border-radius: 8px; transition: all 0.3s ease; }
+        .task:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); border-color: #3498db; }
+        .task h3 { color: #2c3e50; margin-top: 0; display: flex; align-items: center; }
+        .task h3:before { content: "•"; color: #3498db; font-size: 24px; margin-right: 10px; }
+        .task p { color: #5a6a7f; margin: 10px 0 15px; }
+        button { padding: 12px 25px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; }
+        button:hover { background: #2980b9; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3); }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; box-shadow: none; }
+        button .icon { margin-right: 8px; font-size: 18px; }
+        .status { margin-top: 15px; padding: 12px; border-radius: 6px; font-size: 15px; line-height: 1.5; }
+        .success { background-color: #d5f5e3; color: #27ae60; border-left: 4px solid #27ae60; }
+        .error { background-color: #fadbd8; color: #c0392b; border-left: 4px solid #c0392b; }
+        .info { background-color: #d6eaf8; color: #2980b9; border-left: 4px solid #2980b9; }
+        .loading { background-color: #f0f3f7; color: #7f8c8d; border-left: 4px solid #7f8c8d; display: flex; align-items: center; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(127, 140, 141, 0.2); border-top: 3px solid #7f8c8d; border-radius: 50%; margin-right: 10px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; }
+        input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; transition: all 0.3s; }
+        input:focus { border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); outline: none; }
+        .help-text { font-size: 14px; color: #7f8c8d; margin-top: 6px; }
+        .instructions { background: #f8f9fa; border-radius: 8px; padding: 20px; margin-top: 30px; border-left: 4px solid #f1c40f; }
+        .instructions h3 { color: #2c3e50; margin-top: 0; display: flex; align-items: center; }
+        .instructions h3:before { content: "🛈"; margin-right: 10px; font-size: 20px; }
+        .instructions ol { padding-left: 20px; }
+        .instructions li { margin-bottom: 15px; line-height: 1.5; }
+        .instructions code { background: #e8f4fc; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        footer { margin-top: 40px; text-align: center; color: #7f8c8d; font-size: 14px; padding-top: 20px; border-top: 1px solid #ecf0f1; }
+        .step-number { display: inline-block; width: 25px; height: 25px; background: #3498db; color: white; border-radius: 50%; text-align: center; line-height: 25px; margin-right: 10px; font-weight: bold; }
+    </style>
 </head>
 <body>
-  <h1>🐟 鱼盆ETF策略触发器</h1>
-  
-  <div class="container">
-    <div class="config-section">
-      <h2>📝 第一步：配置信息</h2>
-      
-      <div class="input-group">
-        <label for="owner">你的GitHub用户名：</label>
-        <input type="text" id="owner" placeholder="例如：karmyshunde-sudo">
-        <div class="help-text">这是你登录GitHub的用户名</div>
-      </div>
-      
-      <div class="input-group">
-        <label for="repo">策略仓库名称：</label>
-        <input type="text" id="repo" placeholder="例如：etf-strategy" value="etf-strategy">
-        <div class="help-text">存储策略代码的仓库名</div>
-      </div>
-      
-      <div class="input-group">
-        <label for="pat">安全密钥 (PAT)：</label>
-        <input type="password" id="pat" placeholder="粘贴你的GitHub密钥">
-        <div class="help-text">从GitHub获取的个人访问令牌</div>
-      </div>
-      
-      <button onclick="saveConfig()">
-        <span class="icon">💾</span> 保存配置
-      </button>
-    </div>
+    <h1>🐟 鱼盆ETF策略触发器</h1>
     
-    <h2>🚀 第二步：选择任务</h2>
-    
-    <div class="task">
-      <h3>【T01】手动推送微信消息 </h3>
-      <p>发送测试消息到企业微信，验证消息通道是否正常</p>
-      <button onclick="triggerTest('test_message')">
-        <span class="icon">📤</span> 点击触发测试
-      </button>
-      <div id="test_message_status" class="status"></div>
-    </div>
-    
-    <div class="task">
-      <h3>【T04】手动推送当前股票池</h3>
-      <p>推送当前有效的ETF股票池到微信</p>
-      <button onclick="triggerTest('test_stock_pool')">
-        <span class="icon">📊</span> 点击触发测试
-      </button>
-      <div id="test_stock_pool_status" class="status"></div>
-    </div>
-    
-    <div class="task">
-      <h3>【T05】手动执行策略并推送结果</h3>
-      <p>执行策略计算并推送买卖信号到微信</p>
-      <button onclick="triggerTest('test_execute')">
-        <span class="icon">🤖</span> 点击触发测试
-      </button>
-      <div id="test_execute_status" class="status"></div>
-    </div>
-    
-    <div class="task">
-      <h3>【T06】手动重置所有仓位</h3>
-      <p>将所有ETF仓位重置为0%，用于测试</p>
-      <button onclick="triggerTest('test_reset')">
-        <span class="icon">🔄</span> 点击触发测试
-      </button>
-      <div id="test_reset_status" class="status"></div>
-    </div>
+    <div class="container">
+        <div class="config-section">
+            <h2>📝 第一步：配置信息</h2>
+            <div class="input-group">
+                <label for="owner">你的GitHub用户名：</label>
+                <input type="text" id="owner" placeholder="例如：yourusername" />
+                <p class="help-text">这是你登录GitHub的用户名</p>
+            </div>
+            <div class="input-group">
+                <label for="repo">策略仓库名称：</label>
+                <input type="text" id="repo" value="fishbowl-strategy" readonly />
+                <p class="help-text">存储策略代码的仓库名（固定为fishbowl-strategy）</p>
+            </div>
+            <div class="input-group">
+                <label for="pat">安全密钥 (PAT)：</label>
+                <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
+                <p class="help-text">从GitHub获取的个人访问令牌</p>
+            </div>
+            <button onclick="saveConfig()">💾 保存配置</button>
+        </div>
 
-    <div class="task">
-      <h3>【T07】手动推送新股信息</h3>
-      <p>推送当天/或7天回溯可申购的股票信息</p>
-      <button onclick="triggerTest('test_new_stock')">
-        <span class="icon">💹</span> 点击触发测试
-      </button>
-      <div id="test_new_stock_status" class="status"></div>
+        <h2>🚀 第二步：选择任务</h2>
+        
+        <div class="task">
+            <h3>【T01】手动推送微信消息</h3>
+            <p>发送测试消息到企业微信，验证消息通道是否正常</p>
+            <button onclick="triggerTest('test_push')">📤 点击触发测试</button>
+            <div id="test_push_status" class="status"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【T04】手动推送当前股票池</h3>
+            <p>推送当前有效的ETF股票池到微信</p>
+            <button onclick="triggerTest('manual_push_pool')">📊 点击触发测试</button>
+            <div id="manual_push_pool_status" class="status"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【T05】手动执行策略并推送结果</h3>
+            <p>执行策略计算并推送买卖信号到微信</p>
+            <button onclick="triggerTest('force_execute')">🤖 点击触发测试</button>
+            <div id="force_execute_status" class="status"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【T06】手动重置所有仓位</h3>
+            <p>将所有ETF仓位重置为0%，用于测试</p>
+            <button onclick="triggerTest('reset_position')">🔄 点击触发测试</button>
+            <div id="reset_position_status" class="status"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【T07】手动推送新股信息</h3>
+            <p>推送当天/或7天回溯可申购的股票信息</p>
+            <button onclick="triggerTest('push_ipo_info')">💹 点击触发测试</button>
+            <div id="push_ipo_info_status" class="status"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【T09】手动套利扫描</h3>
+            <p>扫描并推送ETF套利机会到微信</p>
+            <button onclick="triggerTest('check_arbitrage')">🔍 点击触发测试</button>
+            <div id="check_arbitrage_status" class="status"></div>
+        </div>
+        
+        <div class="instructions">
+            <h3>使用说明</h3>
+            <ol>
+                <li>
+                    <strong>获取安全密钥 (PAT)：</strong>
+                    <br>登录 GitHub → 点击右上角头像 → Settings → 左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)
+                    <br>点击 Generate new token → 填写 Note: etf-trigger
+                    <br>勾选权限：repo (全选) 和 workflow
+                    <br>点击 Generate token → 复制生成的密钥
+                </li>
+                <li>
+                    <strong>填写配置信息：</strong>
+                    <br>你的GitHub用户名：你的账号名
+                    <br>策略仓库名称：保持默认 <code>fishbowl-strategy</code>
+                    <br>安全密钥：粘贴复制的密钥
+                    <br>点击 <strong>保存配置</strong>
+                </li>
+                <li>
+                    <strong>触发任务：</strong>
+                    <br>点击任意任务按钮（如"测试消息推送"）
+                    <br>等待1-2分钟，查看微信推送结果
+                    <br>在 <code>fishbowl-strategy</code> 仓库的 Actions 标签页查看执行状态
+                </li>
+            </ol>
+        </div>
     </div>
+    
+    <footer>
+        🐟 鱼盆ETF投资决策系统 | 全自动量化策略 | GitHub部署方案<br>
+        安全提示：密钥仅保存在你的浏览器中，不会发送到任何服务器
+    </footer>
 
-    <div class="task">
-      <h3>【T08】手动推送新上市股票信息</h3>
-      <p>推送当天/或7天回溯新上市交易的股票信息</p>
-      <button onclick="triggerTest('test_new_stock_listings')">
-        <span class="icon">💹</span> 点击触发测试
-      </button>
-      <div id="test_new_stock_listings_status" class="status"></div>
-    </div>
-    
-    <div class="task">
-      <h3>【T09】手动套利扫描</h3>
-      <p>扫描并推送ETF套利机会到微信</p>
-      <button onclick="triggerTest('test_arbitrage')">
-        <span class="icon">🔍</span> 点击触发测试
-      </button>
-      <div id="test_arbitrage_status" class="status"></div>
-    </div>
-  </div>
-  
-  <div class="instructions">
-    <h3>使用说明</h3>
-    <ol>
-      <li>
-        <span class="step-number">1</span>
-        <strong>获取安全密钥 (PAT)</strong>：
-        <ul>
-          <li>登录 GitHub → 点击右上角头像 → Settings</li>
-          <li>左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)</li>
-          <li>点击 Generate new token → 填写 Note: <code>etf-trigger</code></li>
-          <li>勾选权限：<code>repo</code> (全选) 和 <code>workflow</code></li>
-          <li>点击 Generate token → 复制生成的密钥</li>
-        </ul>
-      </li>
-      <li>
-        <span class="step-number">2</span>
-        <strong>填写配置信息</strong>：
-        <ul>
-          <li>你的GitHub用户名：你的账号名</li>
-          <li>策略仓库名称：<code>etf-strategy</code>（保持不变）</li>
-          <li>安全密钥：粘贴复制的密钥</li>
-          <li>点击 <strong>保存配置</strong></li>
-        </ul>
-      </li>
-      <li>
-        <span class="step-number">3</span>
-        <strong>触发任务</strong>：
-        <ul>
-          <li>点击任意任务按钮（如"测试消息推送"）</li>
-          <li>等待1-2分钟，查看微信推送结果</li>
-          <li>在 <code>etf-strategy</code> 仓库的 Actions 标签页查看执行状态</li>
-        </ul>
-      </li>
-    </ol>
-  </div>
-  
-  <footer>
-    <p>🐟 鱼盆ETF投资决策系统 | 全自动量化策略 | GitHub部署方案</p>
-    <p>安全提示：密钥仅保存在你的浏览器中，不会发送到任何服务器</p>
-  </footer>
-
-  <script>
-    // 保存配置到本地存储
-    function saveConfig() {
-      const owner = document.getElementById('owner').value.trim();
-      const repo = document.getElementById('repo').value.trim();
-      const pat = document.getElementById('pat').value.trim();
-      
-      if (!owner || !repo || !pat) {
-        alert('请填写所有配置信息！');
-        return;
-      }
-      
-      // 保存到本地存储
-      localStorage.setItem('etf_config', JSON.stringify({ 
-        owner, 
-        repo, 
-        pat 
-      }));
-      
-      // 显示成功消息
-      const statusDiv = document.createElement('div');
-      statusDiv.className = 'status success';
-      statusDiv.textContent = '✓ 配置已保存！关闭页面后依然有效';
-      document.querySelector('.config-section').appendChild(statusDiv);
-      
-      // 3秒后消失
-      setTimeout(() => {
-        statusDiv.remove();
-      }, 3000);
-    }
-    
-    // 更新任务状态显示
-    function updateStatus(task, status, className, message) {
-      const statusDiv = document.getElementById(`${task}_status`);
-      statusDiv.className = `status ${className}`;
-      
-      if (status === 'loading') {
-        statusDiv.innerHTML = `<div class="loading-spinner"></div> ${message}`;
-      } else {
-        statusDiv.textContent = message;
-      }
-    }
-    
-    // 触发测试任务
-    async function triggerTest(task) {
-      // 检查配置是否已保存
-      const savedConfig = localStorage.getItem('etf_config');
-      if (!savedConfig) {
-        alert('请先填写并保存配置信息！');
-        return;
-      }
-      
-      const config = JSON.parse(savedConfig);
-      const { owner, repo, pat } = config;
-      
-      // 验证配置
-      if (!owner || !repo || !pat) {
-        alert('配置信息不完整，请重新填写并保存！');
-        return;
-      }
-      
-      // 更新状态
-      updateStatus(task, 'loading', 'loading', '正在触发任务...');
-      
-      try {
-        // 1. 获取工作流ID
-        const workflowsUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows`;
-        
-        const workflowsResponse = await fetch(workflowsUrl, {
-          headers: { 
-            'Authorization': `Bearer ${pat}`,
-            'Accept': 'application/vnd.github+json'
-          }
-        });
-        
-        if (!workflowsResponse.ok) {
-          const errorData = await workflowsResponse.json();
-          throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
-        }
-        
-        const workflowsData = await workflowsResponse.json();
-        
-        // 查找schedule.yml工作流
-        const scheduleWorkflow = workflowsData.workflows.find(
-          w => w.name === 'ETF Strategy Scheduler' || w.path.includes('schedule.yml')
-        );
-        
-        if (!scheduleWorkflow) {
-          throw new Error('未找到ETF策略工作流');
-        }
-        
-        const workflowId = scheduleWorkflow.id;
-        
-        // 2. 触发工作流 - 关键修改：添加task参数
-        const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`;
-        
-        const dispatchResponse = await fetch(dispatchUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${pat}`,
-            'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ref: 'main',
-            inputs: { 
-              task: task  // 这里添加task参数
+    <script>
+        // 保存配置到本地存储
+        function saveConfig() {
+            const owner = document.getElementById('owner').value.trim();
+            const repo = document.getElementById('repo').value.trim();
+            const pat = document.getElementById('pat').value.trim();
+            
+            if (!owner || !repo || !pat) {
+                alert('请填写所有配置信息！');
+                return;
             }
-          })
-        });
-        
-        if (dispatchResponse.status === 204) {
-          updateStatus(task, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信推送');
-        } else {
-          const errorText = await dispatchResponse.text();
-          throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+            
+            // 保存到本地存储
+            localStorage.setItem('etf_config', JSON.stringify({ owner, repo, pat }));
+            
+            // 显示成功消息
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status success';
+            statusDiv.textContent = '✓ 配置已保存！关闭页面后依然有效';
+            document.querySelector('.config-section').appendChild(statusDiv);
+            
+            // 3秒后消失
+            setTimeout(() => { statusDiv.remove(); }, 3000);
         }
-        
-      } catch (error) {
-        console.error('触发错误:', error);
-        updateStatus(task, 'error', 'error', `❌ 错误: ${error.message}`);
-      }
-    }
-    
-    // 页面加载时检查保存的配置
-    document.addEventListener('DOMContentLoaded', function() {
-      const savedConfig = localStorage.getItem('etf_config');
-      if (savedConfig) {
-        const config = JSON.parse(savedConfig);
-        document.getElementById('owner').value = config.owner || '';
-        document.getElementById('repo').value = config.repo || '';
-        document.getElementById('pat').value = config.pat || '';
-        
-        // 显示配置已加载
-        const statusDiv = document.createElement('div');
-        statusDiv.className = 'status info';
-        statusDiv.textContent = '✓ 已加载保存的配置';
-        document.querySelector('.config-section').appendChild(statusDiv);
-        
-        setTimeout(() => {
-          statusDiv.remove();
-        }, 3000);
-      }
-    });
-  </script>
+
+        // 更新任务状态显示
+        function updateStatus(task, status, className, message) {
+            const statusDiv = document.getElementById(`${task}_status`);
+            statusDiv.className = `status ${className}`;
+            if (status === 'loading') {
+                statusDiv.innerHTML = `<div class="loading-spinner"></div> ${message}`;
+            } else {
+                statusDiv.textContent = message;
+            }
+        }
+
+        // 触发测试任务
+        async function triggerTest(task) {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('etf_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, repo, pat } = config;
+            
+            // 验证配置
+            if (!owner || !repo || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 更新状态
+            updateStatus(task, 'loading', 'loading', '正在触发任务...');
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找主工作流（鱼盆模型ETF量化策略调度）
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name.includes('鱼盆模型') && w.name.includes('调度')
+                );
+                
+                if (!mainWorkflow) {
+                    throw new Error('未找到鱼盆模型策略工作流');
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流 - 传递任务参数
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { task: task }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    updateStatus(task, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信推送');
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                updateStatus(task, 'error', 'error', `❌ 错误: ${error.message}`);
+            }
+        }
+
+        // 页面加载时检查保存的配置
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedConfig = localStorage.getItem('etf_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('owner').value = config.owner || '';
+                document.getElementById('repo').value = config.repo || 'fishbowl-strategy';
+                document.getElementById('pat').value = config.pat || '';
+                
+                // 显示配置已加载
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'status info';
+                statusDiv.textContent = '✓ 已加载保存的配置';
+                document.querySelector('.config-section').appendChild(statusDiv);
+                
+                setTimeout(() => { statusDiv.remove(); }, 3000);
+            }
+        });
+    </script>
 </body>
 </html>

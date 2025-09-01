@@ -302,10 +302,10 @@
         <div class="task">
             <h3>【新股】手动推送测试</h3>
             <p>向微信推送测试消息，验证消息通道是否正常</p>
-            <button onclick="triggerTask('push')">
+            <button onclick="triggerNewStockTask('test_push')">
                 <span class="icon">📤</span> 触发测试
             </button>
-            <div id="push-status" class="status" style="display: none;"></div>
+            <div id="new-stock-status" class="status" style="display: none;"></div>
         </div>
         
         <div class="task">
@@ -448,7 +448,7 @@
             statusDiv.style.display = 'block';
         }
 
-        // 触发任务
+        // 触发任务（ETF策略）
         async function triggerTask(taskType) {
             // 检查配置是否已保存
             const savedConfig = localStorage.getItem('multi_project_config');
@@ -462,10 +462,7 @@
             let repoName;
             let workflowTask;
             
-            if (taskType === 'push') {
-                repoName = config.repoPush;
-                workflowTask = 'test_push';
-            } else if (taskType === 'karmy') {
+            if (taskType === 'karmy') {
                 repoName = config.repoKarmy;
                 workflowTask = 'calculate_position';
             } else {
@@ -498,15 +495,13 @@
                 
                 const workflowsData = await workflowsResponse.json();
                 
-                // 查找主工作流
-                const mainWorkflow = workflowsData.workflows.find(w => 
-                    w.name.includes('Stock Analyse') || 
-                    w.name.includes('ETF数据爬取与策略推送') || 
-                    w.name.includes('New Stock Push')
+                // 查找主工作流（ETF策略）
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name.includes('ETF数据爬取与策略推送')
                 );
                 
                 if (!mainWorkflow) {
-                    throw new Error('未找到工作流');
+                    throw new Error('未找到ETF策略工作流');
                 }
                 
                 const workflowId = mainWorkflow.id;
@@ -536,6 +531,84 @@
             } catch (error) {
                 console.error('触发错误:', error);
                 updateStatus(taskType, 'error', 'error', `❌ 错误: ${error.message}`);
+            }
+        }
+        
+        // 触发新股推送任务
+        async function triggerNewStockTask(taskType) {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, pat } = config;
+            const repoName = config.repoPush;
+            
+            // 验证配置
+            if (!owner || !repoName || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 更新状态
+            updateStatus('new-stock', 'loading', 'loading', '正在触发新股推送任务...');
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找新股推送工作流
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name === '新股信息推送任务（仅时间判断）新增5分钟定时测试任务'
+                );
+                
+                if (!mainWorkflow) {
+                    throw new Error('未找到新股推送工作流');
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { task: taskType }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    updateStatus('new-stock', 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信消息');
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                updateStatus('new-stock', 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
         

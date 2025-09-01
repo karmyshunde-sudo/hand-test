@@ -3,156 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DS08141210多项目触发器</title>
+    <title>多项目触发器</title>
     <style>
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: Arial, sans-serif; 
             max-width: 800px; 
             margin: 0 auto; 
-            padding: 20px; 
-            line-height: 1.6; 
+            padding: 15px; 
+            line-height: 1.5; 
             color: #333; 
-            background: #f5f7fa; 
+            background: #f9f9f9; 
+            font-size: 14px;
         }
         h1 { 
-            color: #2c3e50; 
+            color: #333; 
             text-align: center; 
-            border-bottom: 2px solid #3498db; 
-            padding-bottom: 15px; 
-            margin-bottom: 30px; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+            font-size: 18px;
         }
         .container { 
             background: white; 
-            padding: 25px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-            margin-bottom: 30px; 
+            padding: 15px; 
+            border-radius: 5px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            margin-bottom: 20px;
         }
-        .config-section { 
-            background: #e8f4fc; 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-bottom: 25px; 
-            border-left: 4px solid #3498db; 
+        .input-group { 
+            margin-bottom: 12px; 
         }
-        .project-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+        label { 
+            display: block; 
+            margin-bottom: 4px; 
+            font-weight: bold; 
+            color: #333; 
+            font-size: 13px;
         }
-        .project-selector button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        input { 
+            width: 100%; 
+            padding: 8px 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-size: 13px;
         }
-        .project-selector button.active {
-            background: #3498db;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
-        }
-        .project-selector button:not(.active) {
-            background: #f1f2f6;
-            color: #7f8c8d;
-        }
-        .task { 
-            margin-bottom: 20px; 
-            padding: 20px; 
-            background: white; 
-            border: 1px solid #e0e6ed; 
-            border-radius: 8px; 
-            transition: all 0.3s ease; 
-        }
-        .task:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
-            border-color: #3498db; 
-        }
-        .task h3 { 
-            color: #2c3e50; 
-            margin-top: 0; 
-            display: flex; 
-            align-items: center; 
-        }
-        .task h3:before { 
-            content: "•"; 
-            color: #3498db; 
-            font-size: 24px; 
-            margin-right: 10px; 
-        }
-        .task p { 
-            color: #5a6a7f; 
-            margin: 10px 0 15px; 
+        input:focus { 
+            border-color: #4a90e2; 
+            outline: none; 
         }
         button { 
-            padding: 12px 25px; 
-            background: #3498db; 
+            padding: 8px 15px; 
+            background: #4a90e2; 
             color: white; 
             border: none; 
-            border-radius: 6px; 
+            border-radius: 4px; 
             cursor: pointer; 
-            font-size: 16px; 
-            font-weight: 600; 
-            transition: all 0.3s ease; 
-            display: inline-flex; 
-            align-items: center; 
+            font-size: 13px; 
+            margin-top: 5px;
         }
         button:hover { 
-            background: #2980b9; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3); 
+            background: #357ae8; 
         }
         button:disabled { 
-            background: #bdc3c7; 
+            background: #ccc; 
             cursor: not-allowed; 
-            transform: none; 
-            box-shadow: none; 
-        }
-        button .icon { 
-            margin-right: 8px; 
-            font-size: 18px; 
         }
         .status { 
-            margin-top: 15px; 
-            padding: 12px; 
-            border-radius: 6px; 
-            font-size: 15px; 
-            line-height: 1.5; 
+            margin-top: 8px; 
+            padding: 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
         }
         .success { 
-            background-color: #d5f5e3; 
-            color: #27ae60; 
-            border-left: 4px solid #27ae60; 
+            background-color: #e6f7e6; 
+            color: #2e7d32; 
+            border-left: 3px solid #4caf50; 
         }
         .error { 
-            background-color: #fadbd8; 
-            color: #c0392b; 
-            border-left: 4px solid #c0392b; 
+            background-color: #ffebee; 
+            color: #c62828; 
+            border-left: 3px solid #f44336; 
         }
         .info { 
-            background-color: #d6eaf8; 
-            color: #2980b9; 
-            border-left: 4px solid #2980b9; 
+            background-color: #e3f2fd; 
+            color: #1976d2; 
+            border-left: 3px solid #2196f3; 
         }
         .loading { 
-            background-color: #f0f3f7; 
-            color: #7f8c8d; 
-            border-left: 4px solid #7f8c8d; 
+            background-color: #f5f5f5; 
+            color: #616161; 
+            border-left: 3px solid #757575; 
             display: flex; 
             align-items: center; 
         }
         .loading-spinner { 
             display: inline-block; 
-            width: 20px; 
-            height: 20px; 
-            border: 3px solid rgba(127, 140, 141, 0.2); 
-            border-top: 3px solid #7f8c8d; 
+            width: 16px; 
+            height: 16px; 
+            border: 2px solid rgba(97, 97, 97, 0.2); 
+            border-top: 2px solid #616161; 
             border-radius: 50%; 
-            margin-right: 10px; 
+            margin-right: 6px; 
             animation: spin 1s linear infinite; 
         }
         @keyframes spin { 
@@ -160,362 +111,244 @@
                 transform: rotate(360deg); 
             } 
         }
-        .input-group { 
-            margin-bottom: 20px; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            color: #2c3e50; 
-        }
-        input, select { 
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            font-size: 16px; 
-            transition: all 0.3s; 
-        }
-        input:focus, select:focus { 
-            border-color: #3498db; 
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
-            outline: none; 
-        }
         .help-text { 
-            font-size: 14px; 
-            color: #7f8c8d; 
-            margin-top: 6px; 
+            font-size: 12px; 
+            color: #666; 
+            margin-top: 4px; 
         }
-        .instructions { 
-            background: #f8f9fa; 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin-top: 30px; 
-            border-left: 4px solid #f1c40f; 
-        }
-        .instructions h3 { 
-            color: #2c3e50; 
-            margin-top: 0; 
-            display: flex; 
-            align-items: center; 
-        }
-        .instructions h3:before { 
-            content: "🛈"; 
-            margin-right: 10px; 
-            font-size: 20px; 
-        }
-        .instructions ol { 
-            padding-left: 20px; 
-        }
-        .instructions li { 
+        .task { 
             margin-bottom: 15px; 
-            line-height: 1.5; 
-        }
-        .instructions code { 
-            background: #e8f4fc; 
-            padding: 2px 6px; 
+            padding: 12px; 
+            background: #f8f8f8; 
             border-radius: 4px; 
-            font-family: monospace; 
         }
-        footer { 
-            margin-top: 40px; 
-            text-align: center; 
-            color: #7f8c8d; 
+        .task h3 { 
+            color: #333; 
+            margin: 0 0 8px 0; 
             font-size: 14px; 
-            padding-top: 20px; 
-            border-top: 1px solid #ecf0f1; 
-        }
-        .step-number { 
-            display: inline-block; 
-            width: 25px; 
-            height: 25px; 
-            background: #3498db; 
-            color: white; 
-            border-radius: 50%; 
-            text-align: center; 
-            line-height: 25px; 
-            margin-right: 10px; 
-            font-weight: bold; 
-        }
-        .hidden { 
-            display: none; 
         }
         .stock-analysis-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 8px;
         }
-        .project-reminder {
-            background: #fff8e6;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #f1c40f;
+        .legacy-tasks {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
-        .project-description {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin-top: 5px;
+        .legacy-task {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        .legacy-task h3 {
+            color: #666;
+            margin: 0 0 5px 0;
+            font-size: 13px;
+        }
+        .legacy-task p {
+            color: #777;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        footer { 
+            margin-top: 20px; 
+            text-align: center; 
+            color: #777; 
+            font-size: 12px; 
+            padding-top: 10px; 
+            border-top: 1px solid #eee; 
         }
     </style>
 </head>
 <body>
-    <h1>🚀 多项目触发器</h1>
+    <h1>多项目触发器</h1>
     
     <div class="container">
-        <div class="config-section">
-            <h2>📝 第一步：配置信息</h2>
-            
-            <div class="project-selector">
-                <button id="project-push" class="active" onclick="switchProject('push-new-stock-everyday')">新股推送</button>
-                <button id="project-karmy" onclick="switchProject('karmy-gold')">ETF策略</button>
-                <button id="project-stock" onclick="switchProject('stock-analyse')">股票分析</button>
-            </div>
-            
-            <div id="project-reminder-push" class="project-reminder">
-                <strong>新股推送项目</strong>
-                <p class="project-description">用于推送新股、新上市股信息到微信</p>
-            </div>
-            <div id="project-reminder-karmy" class="project-reminder hidden">
-                <strong>ETF量化策略项目</strong>
-                <p class="project-description">Karmy-Gold ETF量化策略系统，计算仓位策略</p>
-            </div>
-            <div id="project-reminder-stock" class="project-reminder hidden">
-                <strong>股票分析项目</strong>
-                <p class="project-description">分析指定A股代码并生成详细报告，通过邮件发送</p>
-            </div>
-            
-            <div class="input-group">
-                <label for="owner">你的GitHub用户名：</label>
-                <input type="text" id="owner" placeholder="例如：yourusername" />
-                <p class="help-text">这是你登录GitHub的用户名</p>
-            </div>
-            <div class="input-group">
-                <label for="repo">项目仓库名称：</label>
-                <select id="repo">
-                    <option value="push-new-stock-everyday">push-new-stock-everyday (新股推送)</option>
-                    <option value="karmy-gold">karmy-gold (ETF策略)</option>
-                    <option value="stock-analyse">stock-analyse (股票分析)</option>
-                </select>
-                <p class="help-text">选择要操作的项目仓库</p>
-            </div>
-            <div class="input-group">
-                <label for="pat">安全密钥 (PAT)：</label>
-                <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
-                <p class="help-text">从GitHub获取的个人访问令牌</p>
-            </div>
-            <button onclick="saveConfig()">💾 保存配置</button>
-        </div>
-
-        <h2>🚀 第二步：选择任务</h2>
+        <h2 style="margin-top: 0; font-size: 16px;">配置信息</h2>
         
-        <!-- 新股推送任务 -->
-        <div id="tasks-push" class="project-tasks">
-            <div class="task">
-                <h3>【新股】手动推送测试</h3>
-                <p>向微信推送测试消息，验证消息通道是否正常</p>
-                <button onclick="triggerTask('push-new-stock-everyday', 'test_push')">
-                    <span class="icon">📤</span> 点击触发测试
-                </button>
-                <div id="test_push_status" class="status"></div>
-            </div>
+        <div class="input-group">
+            <label for="owner">GitHub用户名：</label>
+            <input type="text" id="owner" placeholder="例如：yourusername" />
+            <div class="help-text">登录GitHub的用户名</div>
         </div>
         
-        <!-- ETF策略任务 -->
-        <div id="tasks-karmy" class="project-tasks hidden">
-            <div class="task">
-                <h3>【ETF】手动推送当前ETF池</h3>
-                <p>推送当前有效的ETF股票池到微信</p>
-                <button onclick="triggerTask('karmy-gold', 'calculate_position')">
-                    <span class="icon">📊</span> 点击触发推送
-                </button>
-                <div id="calculate_position_status" class="status"></div>
-            </div>
+        <div class="input-group">
+            <label for="repo-push">新股推送仓库：</label>
+            <input type="text" id="repo-push" value="push-new-stock-everyday" />
+            <div class="help-text">例如：push-new-stock-everyday</div>
         </div>
         
-        <!-- 股票分析任务 -->
-        <div id="tasks-stock" class="project-tasks hidden">
-            <div class="task">
-                <h3>【股票】详细分析</h3>
-                <p>对指定股票进行详细分析，结果将通过邮件发送</p>
-                
-                <div class="stock-analysis-section">
-                    <div class="input-group">
-                        <label for="stock_code">股票代码：</label>
-                        <input type="text" id="stock_code" placeholder="例如：002511.SZ" value="002511.SZ" />
-                        <p class="help-text">要分析的股票代码，填000000表示只发送测试邮件</p>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="recipient_email">接收邮箱：</label>
-                        <input type="email" id="recipient_email" placeholder="例如：your@email.com" />
-                        <p class="help-text">接收分析报告的邮箱地址</p>
-                    </div>
-                    
-                    <button onclick="triggerStockAnalysis()">
-                        <span class="icon">🔍</span> 详细分析
-                    </button>
-                    <div id="stock_analysis_status" class="status"></div>
+        <div class="input-group">
+            <label for="repo-karmy">ETF策略仓库：</label>
+            <input type="text" id="repo-karmy" value="karmy-gold" />
+            <div class="help-text">例如：karmy-gold</div>
+        </div>
+        
+        <div class="input-group">
+            <label for="repo-stock">股票分析仓库：</label>
+            <input type="text" id="repo-stock" value="stock-analyse" />
+            <div class="help-text">例如：stock-analyse</div>
+        </div>
+        
+        <div class="input-group">
+            <label for="pat">安全密钥 (PAT)：</label>
+            <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
+            <div class="help-text">从GitHub获取的个人访问令牌</div>
+        </div>
+        
+        <button onclick="saveConfig()">保存配置</button>
+        <div id="config-status" class="status" style="display: none;"></div>
+    </div>
+    
+    <div class="container">
+        <h2 style="margin-top: 0; font-size: 16px;">任务执行</h2>
+        
+        <div class="task">
+            <h3>新股推送测试</h3>
+            <p>向微信推送测试消息，验证消息通道是否正常</p>
+            <button onclick="triggerTask('push')">触发测试</button>
+            <div id="push-status" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="task">
+            <h3>ETF策略推送</h3>
+            <p>推送当前有效的ETF股票池到微信</p>
+            <button onclick="triggerTask('karmy')">触发推送</button>
+            <div id="karmy-status" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="task">
+            <h3>股票详细分析</h3>
+            <p>对指定股票进行详细分析，结果将通过邮件发送</p>
+            
+            <div class="stock-analysis-section">
+                <div class="input-group">
+                    <label for="stock_code">股票代码：</label>
+                    <input type="text" id="stock_code" placeholder="例如：002511.SZ" value="002511.SZ" />
+                    <div class="help-text">填000000表示只发送测试邮件</div>
                 </div>
+                
+                <div class="input-group">
+                    <label for="recipient_email">接收邮箱：</label>
+                    <input type="email" id="recipient_email" placeholder="例如：your@email.com" />
+                    <div class="help-text">接收分析报告的邮箱地址</div>
+                </div>
+                
+                <button onclick="triggerStockAnalysis()">详细分析</button>
+                <div id="stock-status" class="status" style="display: none;"></div>
             </div>
         </div>
         
-        <!-- 保留按钮区域 -->
-        <div id="legacy-tasks" class="hidden">
-            <div class="task">
-                <h3>【T05】手动执行策略并推送结果</h3>
+        <div class="legacy-tasks">
+            <h2 style="margin-top: 0; font-size: 15px; color: #666;">其他功能（仅保留）</h2>
+            
+            <div class="legacy-task">
+                <h3>手动执行策略并推送结果</h3>
                 <p>执行策略计算并推送买卖信号到微信</p>
-                <button disabled>🤖 点击触发测试</button>
-                <div class="status info">此功能已迁移至对应项目</div>
+                <button disabled style="background: #ccc; color: #666;">点击触发</button>
+                <div class="status info" style="margin-top: 5px;">此功能已迁移至对应项目</div>
             </div>
             
-            <div class="task">
-                <h3>【T06】手动重置所有仓位</h3>
+            <div class="legacy-task">
+                <h3>手动重置所有仓位</h3>
                 <p>将所有ETF仓位重置为0%，用于测试</p>
-                <button disabled>🔄 点击触发测试</button>
-                <div class="status info">此功能已迁移至对应项目</div>
+                <button disabled style="background: #ccc; color: #666;">点击触发</button>
+                <div class="status info" style="margin-top: 5px;">此功能已迁移至对应项目</div>
             </div>
             
-            <div class="task">
-                <h3>【T07】手动推送新股信息</h3>
+            <div class="legacy-task">
+                <h3>手动推送新股信息</h3>
                 <p>推送当天/或7天回溯可申购的股票信息</p>
-                <button disabled>💹 点击触发测试</button>
-                <div class="status info">此功能已迁移至对应项目</div>
+                <button disabled style="background: #ccc; color: #666;">点击触发</button>
+                <div class="status info" style="margin-top: 5px;">此功能已迁移至对应项目</div>
             </div>
             
-            <div class="task">
-                <h3>【T09】手动套利扫描</h3>
+            <div class="legacy-task">
+                <h3>手动套利扫描</h3>
                 <p>扫描并推送ETF套利机会到微信</p>
-                <button disabled>🔍 点击触发测试</button>
-                <div class="status info">此功能已迁移至对应项目</div>
+                <button disabled style="background: #ccc; color: #666;">点击触发</button>
+                <div class="status info" style="margin-top: 5px;">此功能已迁移至对应项目</div>
             </div>
         </div>
         
-        <div class="instructions">
-            <h3>使用说明</h3>
-            <ol>
-                <li>
-                    <strong>选择项目：</strong>
-                    <br>使用顶部的项目选择器，选择要操作的项目
-                </li>
-                <li>
+        <div class="container" style="margin-top: 20px; padding: 10px;">
+            <h3 style="margin: 0 0 10px 0; font-size: 15px;">使用说明</h3>
+            <ol style="padding-left: 20px; margin: 0; font-size: 13px;">
+                <li style="margin-bottom: 8px;">
                     <strong>获取安全密钥 (PAT)：</strong>
-                    <br>登录 GitHub → 点击右上角头像 → Settings → 左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)
-                    <br>点击 Generate new token → 填写 Note: multi-project-trigger
+                    <br>GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
                     <br>勾选权限：repo (全选) 和 workflow
-                    <br>点击 Generate token → 复制生成的密钥
                 </li>
-                <li>
+                <li style="margin-bottom: 8px;">
                     <strong>填写配置信息：</strong>
-                    <br>你的GitHub用户名：你的账号名
-                    <br>项目仓库名称：选择要操作的项目
+                    <br>用户名：你的GitHub账号名
+                    <br>仓库名称：默认值已填好，可修改
                     <br>安全密钥：粘贴复制的密钥
                     <br>点击 <strong>保存配置</strong>
                 </li>
-                <li>
+                <li style="margin-bottom: 8px;">
                     <strong>触发任务：</strong>
-                    <br>根据所选项目，点击对应的任务按钮
-                    <br>等待1-2分钟，查看结果（微信消息或邮箱）
-                    <br>在对应仓库的 Actions 标签页查看执行状态
+                    <br>点击对应任务的"触发"按钮
+                    <br>等待1-2分钟查看结果
                 </li>
             </ol>
         </div>
     </div>
     
     <footer>
-        🚀 多项目触发器 | 统一管理多个量化项目 | GitHub部署方案<br>
+        多项目触发器 | 统一管理多个量化项目 | GitHub部署方案<br>
         安全提示：密钥仅保存在你的浏览器中，不会发送到任何服务器
     </footer>
 
     <script>
-        // 项目配置
-        const projects = {
-            'push-new-stock-everyday': {
-                name: '新股推送',
-                description: '用于推送新股、新上市股信息到微信',
-                defaultTask: 'test_push'
-            },
-            'karmy-gold': {
-                name: 'ETF策略',
-                description: 'Karmy-Gold ETF量化策略系统，计算仓位策略',
-                defaultTask: 'calculate_position'
-            },
-            'stock-analyse': {
-                name: '股票分析',
-                description: '分析指定A股代码并生成详细报告，通过邮件发送',
-                defaultTask: 'analyze_stock'
-            }
-        };
-        
-        // 当前选中的项目
-        let currentProject = 'push-new-stock-everyday';
-
         // 保存配置到本地存储
         function saveConfig() {
             const owner = document.getElementById('owner').value.trim();
-            const repo = document.getElementById('repo').value.trim();
+            const repoPush = document.getElementById('repo-push').value.trim();
+            const repoKarmy = document.getElementById('repo-karmy').value.trim();
+            const repoStock = document.getElementById('repo-stock').value.trim();
             const pat = document.getElementById('pat').value.trim();
             
-            if (!owner || !repo || !pat) {
+            if (!owner || !repoPush || !repoKarmy || !repoStock || !pat) {
                 alert('请填写所有配置信息！');
                 return;
             }
             
             // 保存到本地存储
-            localStorage.setItem('multi_project_config', JSON.stringify({ owner, repo, pat }));
+            const config = {
+                owner: owner,
+                repoPush: repoPush,
+                repoKarmy: repoKarmy,
+                repoStock: repoStock,
+                pat: pat
+            };
+            
+            localStorage.setItem('multi_project_config', JSON.stringify(config));
             
             // 显示成功消息
-            const statusDiv = document.createElement('div');
+            const statusDiv = document.getElementById('config-status');
+            statusDiv.textContent = '配置已保存！';
             statusDiv.className = 'status success';
-            statusDiv.textContent = '✓ 配置已保存！关闭页面后依然有效';
-            document.querySelector('.config-section').appendChild(statusDiv);
+            statusDiv.style.display = 'block';
             
             // 3秒后消失
-            setTimeout(() => { statusDiv.remove(); }, 3000);
+            setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }
 
         // 更新任务状态显示
         function updateStatus(task, status, className, message) {
-            const statusDiv = document.getElementById(`${task}_status`);
+            const statusDiv = document.getElementById(`${task}-status`);
+            statusDiv.textContent = message;
             statusDiv.className = `status ${className}`;
-            if (status === 'loading') {
-                statusDiv.innerHTML = `<div class="loading-spinner"></div> ${message}`;
-            } else {
-                statusDiv.textContent = message;
-            }
-        }
-        
-        // 切换项目
-        function switchProject(project) {
-            // 更新当前项目
-            currentProject = project;
-            
-            // 更新按钮状态
-            document.querySelectorAll('.project-selector button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById(`project-${project.split('-')[0]}`).classList.add('active');
-            
-            // 显示/隐藏项目提醒
-            document.querySelectorAll('.project-reminder').forEach(el => {
-                el.classList.add('hidden');
-            });
-            document.getElementById(`project-reminder-${project.split('-')[0]}`).classList.remove('hidden');
-            
-            // 更新仓库选择
-            document.getElementById('repo').value = project;
-            
-            // 显示/隐藏任务
-            document.querySelectorAll('.project-tasks').forEach(el => {
-                el.classList.add('hidden');
-            });
-            document.getElementById(`tasks-${project.split('-')[0]}`).classList.remove('hidden');
+            statusDiv.style.display = 'block';
         }
 
-        // 触发通用任务
-        async function triggerTask(repo, task) {
+        // 触发任务
+        async function triggerTask(taskType) {
             // 检查配置是否已保存
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
@@ -525,9 +358,18 @@
             
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
+            let repoName;
+            let workflowTask;
             
-            // 使用当前选择的仓库
-            const repoName = repo;
+            if (taskType === 'push') {
+                repoName = config.repoPush;
+                workflowTask = 'test_push';
+            } else if (taskType === 'karmy') {
+                repoName = config.repoKarmy;
+                workflowTask = 'calculate_position';
+            } else {
+                return;
+            }
             
             // 验证配置
             if (!owner || !repoName || !pat) {
@@ -536,7 +378,7 @@
             }
             
             // 更新状态
-            updateStatus(task, 'loading', 'loading', '正在触发任务...');
+            updateStatus(taskType, 'loading', 'loading', '正在触发任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -549,17 +391,16 @@
                 });
                 
                 if (!workflowsResponse.ok) {
-                    const errorData = await workflowsResponse.json();
-                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status}`);
                 }
                 
                 const workflowsData = await workflowsResponse.json();
                 
                 // 查找主工作流
-                const mainWorkflow = workflowsData.workflows.find(
-                    w => w.name.includes('Stock Analyse') || 
-                          w.name.includes('ETF数据爬取与策略推送') || 
-                          w.name.includes('New Stock Push')
+                const mainWorkflow = workflowsData.workflows.find(w => 
+                    w.name.includes('Stock Analyse') || 
+                    w.name.includes('ETF数据爬取与策略推送') || 
+                    w.name.includes('New Stock Push')
                 );
                 
                 if (!mainWorkflow) {
@@ -568,7 +409,7 @@
                 
                 const workflowId = mainWorkflow.id;
                 
-                // 2. 触发工作流 - 传递任务参数
+                // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
                     method: 'POST',
@@ -579,20 +420,19 @@
                     },
                     body: JSON.stringify({
                         ref: 'main',
-                        inputs: { task: task }
+                        inputs: { task: workflowTask }
                     })
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    updateStatus(task, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
+                    updateStatus(taskType, 'success', 'success', '触发成功！请等待查看结果');
                 } else {
-                    const errorText = await dispatchResponse.text();
-                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                    throw new Error(`触发失败: ${dispatchResponse.status}`);
                 }
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus(task, 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus(taskType, 'error', 'error', `错误: ${error.message}`);
             }
         }
         
@@ -607,7 +447,7 @@
             
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
-            const repoName = 'stock-analyse';
+            const repoName = config.repoStock;
             
             // 获取用户输入
             const stockCode = document.getElementById('stock_code').value.trim();
@@ -632,7 +472,7 @@
             }
             
             // 更新状态
-            updateStatus('stock_analysis', 'loading', 'loading', '正在触发股票分析任务...');
+            updateStatus('stock', 'loading', 'loading', '正在触发分析任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -645,8 +485,7 @@
                 });
                 
                 if (!workflowsResponse.ok) {
-                    const errorData = await workflowsResponse.json();
-                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status}`);
                 }
                 
                 const workflowsData = await workflowsResponse.json();
@@ -662,7 +501,7 @@
                 
                 const workflowId = mainWorkflow.id;
                 
-                // 2. 触发工作流 - 传递任务参数
+                // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
                     method: 'POST',
@@ -682,21 +521,20 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    let message = '✅ 触发成功！';
+                    let message = '触发成功！';
                     if (task === 'test_email') {
-                        message += '请等待1-2分钟检查邮箱是否收到测试邮件';
+                        message += '请检查邮箱是否收到测试邮件';
                     } else {
-                        message += `请等待5-10分钟检查邮箱是否收到${stockCode}的分析报告`;
+                        message += '请等待5-10分钟检查邮箱是否收到分析报告';
                     }
-                    updateStatus('stock_analysis', 'success', 'success', message);
+                    updateStatus('stock', 'success', 'success', message);
                 } else {
-                    const errorText = await dispatchResponse.text();
-                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                    throw new Error(`触发失败: ${dispatchResponse.status}`);
                 }
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus('stock_analysis', 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus('stock', 'error', 'error', `错误: ${error.message}`);
             }
         }
 
@@ -706,20 +544,19 @@
             if (savedConfig) {
                 const config = JSON.parse(savedConfig);
                 document.getElementById('owner').value = config.owner || '';
-                document.getElementById('repo').value = config.repo || 'push-new-stock-everyday';
+                document.getElementById('repo-push').value = config.repoPush || 'push-new-stock-everyday';
+                document.getElementById('repo-karmy').value = config.repoKarmy || 'karmy-gold';
+                document.getElementById('repo-stock').value = config.repoStock || 'stock-analyse';
                 document.getElementById('pat').value = config.pat || '';
                 
                 // 显示配置已加载
-                const statusDiv = document.createElement('div');
+                const statusDiv = document.getElementById('config-status');
+                statusDiv.textContent = '已加载保存的配置';
                 statusDiv.className = 'status info';
-                statusDiv.textContent = '✓ 已加载保存的配置';
-                document.querySelector('.config-section').appendChild(statusDiv);
+                statusDiv.style.display = 'block';
                 
-                setTimeout(() => { statusDiv.remove(); }, 3000);
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
             }
-            
-            // 设置默认项目
-            switchProject('push-new-stock-everyday');
         });
     </script>
 </body>

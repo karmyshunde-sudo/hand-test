@@ -299,6 +299,30 @@
 
         <h2 style="font-size: 16px; margin-top: 0;">🚀 任务执行</h2>
         
+        <!-- 股票分析部分现在是第一个任务 -->
+        <div class="task">
+            <h3>【股票】技术分析</h3>
+            <p>对指定股票进行详细技术分析，结果将通过微信推送</p>
+            
+            <div class="stock-analysis-section">
+                <div class="input-group">
+                    <label for="stock_code">股票代码：</label>
+                    <input type="text" id="stock_code" placeholder="例如：002511.SZ" value="002511.SZ" />
+                    <div class="help-text">输入股票代码（如000001.SZ），填000000表示测试</div>
+                </div>
+                
+                <button onclick="triggerStockAnalysisViaWechat()">
+                    <span class="icon">📱</span> 结果推送微信
+                </button>
+                
+                <button disabled style="background: #bdc3c7; margin-top: 10px;">
+                    <span class="icon">📧</span> 结果发送邮件
+                </button>
+                
+                <div id="stock-status" class="status" style="display: none;"></div>
+            </div>
+        </div>
+        
         <div class="task">
             <h3>【新股】手动推送测试</h3>
             <p>向微信推送测试消息，验证消息通道是否正常</p>
@@ -315,30 +339,6 @@
                 <span class="icon">📊</span> 触发推送
             </button>
             <div id="karmy-status" class="status" style="display: none;"></div>
-        </div>
-        
-        <div class="task">
-            <h3>【股票】详细分析</h3>
-            <p>对指定股票进行详细分析，结果将通过邮件发送</p>
-            
-            <div class="stock-analysis-section">
-                <div class="input-group">
-                    <label for="stock_code">股票代码：</label>
-                    <input type="text" id="stock_code" placeholder="例如：002511.SZ" value="002511.SZ" />
-                    <div class="help-text">填000000表示只发送测试邮件</div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="recipient_email">接收邮箱：</label>
-                    <input type="email" id="recipient_email" placeholder="angel49946491@qq.com" />
-                    <div class="help-text">接收分析报告的邮箱地址</div>
-                </div>
-                
-                <button onclick="triggerStockAnalysis()">
-                    <span class="icon">🔍</span> 详细分析
-                </button>
-                <div id="stock-status" class="status" style="display: none;"></div>
-            </div>
         </div>
         
         <div class="legacy-tasks">
@@ -612,8 +612,8 @@
             }
         }
         
-        // 触发股票分析任务
-        async function triggerStockAnalysis() {
+        // 触发股票分析任务（微信推送）
+        async function triggerStockAnalysisViaWechat() {
             // 检查配置是否已保存
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
@@ -623,11 +623,10 @@
             
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
-            const repoName = config.repoStock;
+            const repoName = config.repoKarmy;  // 使用ETF策略仓库（因为策略3集成在fish-etf项目中）
             
             // 获取用户输入
             const stockCode = document.getElementById('stock_code').value.trim();
-            const recipientEmail = document.getElementById('recipient_email').value.trim();
             
             // 验证配置
             if (!owner || !repoName || !pat) {
@@ -635,20 +634,16 @@
                 return;
             }
             
-            // 验证邮箱格式
-            if (recipientEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) {
-                alert('邮箱格式不正确！');
-                return;
-            }
-            
             // 确定任务类型
             let task = 'analyze_stock';
             if (stockCode === '000000') {
-                task = 'test_email';
+                task = 'analyze_stock';
+                // 使用测试股票代码（例如：000001.SZ）
+                document.getElementById('stock_code').value = '000001.SZ';
             }
             
             // 更新状态
-            updateStatus('stock', 'loading', 'loading', '正在触发分析任务...');
+            updateStatus('stock', 'loading', 'loading', '正在触发技术分析任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -667,13 +662,13 @@
                 
                 const workflowsData = await workflowsResponse.json();
                 
-                // 查找主工作流
+                // 查找ETF策略工作流
                 const mainWorkflow = workflowsData.workflows.find(
-                    w => w.name.includes('Stock Analyse')
+                    w => w.name.includes('ETF数据爬取与策略推送')
                 );
                 
                 if (!mainWorkflow) {
-                    throw new Error('未找到股票分析工作流');
+                    throw new Error('未找到ETF策略工作流');
                 }
                 
                 const workflowId = mainWorkflow.id;
@@ -691,20 +686,13 @@
                         ref: 'main',
                         inputs: { 
                             task: task,
-                            stock_code: stockCode,
-                            recipient_email: recipientEmail
+                            stock_code: document.getElementById('stock_code').value.trim()
                         }
                     })
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    let message = '✅ 触发成功！';
-                    if (task === 'test_email') {
-                        message += '请检查邮箱是否收到测试邮件';
-                    } else {
-                        message += '请等待5-10分钟检查邮箱是否收到分析报告';
-                    }
-                    updateStatus('stock', 'success', 'success', message);
+                    updateStatus('stock', 'success', 'success', '✅ 触发成功！请等待2-3分钟查看微信消息');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -729,7 +717,7 @@
                 
                 // 显示配置已加载
                 const statusDiv = document.getElementById('config-status');
-                statusDiv.textContent = '✓ 已加载保存的配置';
+                statusDiv.textContent = '✓ 已载保存的配置';
                 statusDiv.className = 'status info';
                 statusDiv.style.display = 'block';
                 

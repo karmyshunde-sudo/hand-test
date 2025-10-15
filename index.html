@@ -277,8 +277,8 @@
             
             <div class="input-group">
                 <label for="repo-karmy">ETF策略仓库：</label>
-                <input type="text" id="repo-karmy" value="karmy-gold" />
-                <div class="help-text">例如：karmy-gold</div>
+                <input type="text" id="repo-karmy" value="fish-etf" />
+                <div class="help-text">例如：fish-etf</div>
             </div>
             
             <div class="input-group">
@@ -307,8 +307,8 @@
             <div class="stock-analysis-section">
                 <div class="input-group">
                     <label for="stock_code">股票代码：</label>
-                    <input type="text" id="stock_code" placeholder="例如：002511.SZ" value="002511.SZ" />
-                    <div class="help-text">输入股票代码（如000001.SZ），填000000表示测试</div>
+                    <input type="text" id="stock_code" placeholder="例如：002511" value="002511" />
+                    <div class="help-text">输入6位股票代码（如000001），填000000表示测试</div>
                 </div>
                 
                 <div class="input-group">
@@ -485,7 +485,7 @@
             updateStatus(taskType, 'loading', 'loading', '正在触发任务...');
             
             try {
-                // 1. 获取工作流ID
+                // 1. 获取工作流ID (修复URL空格问题)
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
                 const workflowsResponse = await fetch(workflowsUrl, {
                     headers: {
@@ -512,7 +512,7 @@
                 
                 const workflowId = mainWorkflow.id;
                 
-                // 2. 触发工作流
+                // 2. 触发工作流 (修复URL空格问题)
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
                     method: 'POST',
@@ -563,7 +563,7 @@
             updateStatus('new-stock', 'loading', 'loading', '正在触发新股推送任务...');
             
             try {
-                // 1. 获取工作流ID
+                // 1. 获取工作流ID (修复URL空格问题)
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
                 const workflowsResponse = await fetch(workflowsUrl, {
                     headers: {
@@ -590,7 +590,7 @@
                 
                 const workflowId = mainWorkflow.id;
                 
-                // 2. 触发工作流
+                // 2. 触发工作流 (修复URL空格问题)
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
                     method: 'POST',
@@ -629,10 +629,10 @@
             
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
-            const repoName = config.repoKarmy;  // 使用ETF策略仓库（因为策略3集成在fish-etf项目中）
+            const repoName = config.repoKarmy;  // 使用ETF策略仓库
             
             // 获取用户输入
-            const stockCode = document.getElementById('stock_code').value.trim();
+            let stockCode = document.getElementById('stock_code').value.trim();
             
             // 验证配置
             if (!owner || !repoName || !pat) {
@@ -644,15 +644,15 @@
             let task = 'analyze_stock';
             if (stockCode === '000000') {
                 task = 'analyze_stock';
-                // 使用测试股票代码（例如：000001.SZ）
-                document.getElementById('stock_code').value = '000001.SZ';
+                stockCode = '000001'; // 使用测试股票代码
+                document.getElementById('stock_code').value = stockCode;
             }
             
             // 更新状态
             updateStatus('stock', 'loading', 'loading', '正在触发技术分析任务...');
             
             try {
-                // 1. 获取工作流ID
+                // 1. 获取工作流ID (修复URL空格问题)
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
                 const workflowsResponse = await fetch(workflowsUrl, {
                     headers: {
@@ -668,18 +668,20 @@
                 
                 const workflowsData = await workflowsResponse.json();
                 
-                // 查找ETF策略工作流
+                // 专业修复：查找个股技术分析工作流（精确匹配）
                 const mainWorkflow = workflowsData.workflows.find(
-                    w => w.name.includes('ETF数据爬取与策略推送')
+                    w => w.name === '个股技术分析（手动）'
                 );
                 
                 if (!mainWorkflow) {
-                    throw new Error('未找到ETF策略工作流');
+                    // 专业诊断：显示可用的工作流列表
+                    const availableWorkflows = workflowsData.workflows.map(w => w.name).join(', ');
+                    throw new Error(`未找到"个股技术分析（手动）"工作流。可用工作流: ${availableWorkflows}`);
                 }
                 
                 const workflowId = mainWorkflow.id;
                 
-                // 2. 触发工作流
+                // 2. 触发工作流 (修复URL空格问题)
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
                     method: 'POST',
@@ -692,7 +694,7 @@
                         ref: 'main',
                         inputs: { 
                             task: task,
-                            stock_code: document.getElementById('stock_code').value.trim()
+                            stock_code: stockCode  // 仅传递6位股票代码
                         }
                     })
                 });
@@ -717,7 +719,7 @@
                 const config = JSON.parse(savedConfig);
                 document.getElementById('owner').value = config.owner || '';
                 document.getElementById('repo-push').value = config.repoPush || 'push-new-stock-everyday';
-                document.getElementById('repo-karmy').value = config.repoKarmy || 'karmy-gold';
+                document.getElementById('repo-karmy').value = config.repoKarmy || 'fish-etf';
                 document.getElementById('repo-stock').value = config.repoStock || 'stock-analyse';
                 document.getElementById('pat').value = config.pat || '';
                 

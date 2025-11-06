@@ -259,21 +259,82 @@
             font-size: 20px;
             margin-right: 8px;
         }
-        /* 两栏布局样式 */
-        .config-row {
+        /* 两栏布局样式 - 使用Grid确保对齐 */
+        .config-section {
+            position: relative;
+            padding: 25px;
+        }
+        .config-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 0;
+        }
+        .config-item {
             display: flex;
-            flex-wrap: wrap;
-            margin: 0 -15px 25px;
+            flex-direction: column;
+            margin-bottom: 15px;
+            padding: 0;
         }
-        .config-half {
-            flex: 0 0 50%;
-            padding: 0 15px;
+        .config-label {
+            grid-column: 1 / -1;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e6ed;
+        }
+        /* 确保所有元素对齐的辅助样式 */
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
+        /* 输入框对齐样式 */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .input-group label {
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 8px;
+        }
+        .input-group input {
+            height: 42px;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .input-group .help-text {
+            height: 16px;
+            line-height: 16px;
+        }
+        /* 按钮对齐 - 确保与输入框X坐标完全一致 */
         .config-button {
             display: flex;
             align-items: flex-end;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
+        .config-button button {
+            width: 100%;
+            height: 42px;
+            box-sizing: border-box;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin: 0;
+            border: 1px solid transparent;
+        }
+
         /* 手动任务模块样式 */
         .manual-tasks {
             margin-top: 25px;
@@ -283,13 +344,65 @@
         .task-row {
             display: flex;
             flex-wrap: wrap;
+            padding: 0;
             margin: 0 -10px 15px;
         }
         .task-button {
             flex: 0 0 33.333%;
+            min-width: 120px;
             padding: 0 10px;
-            box-sizing: border-box;
             margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .task-button button {
+            font-size: 12px;
+            padding: 12px 10px;
+            height: 48px;
+            white-space: nowrap;
+            text-align: center;
+            line-height: 1.4;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .task-button .btn-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        /* 滚动条样式优化 */
+        .task-row::-webkit-scrollbar {
+            height: 5px;
+        }
+        .task-row::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .task-row::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        .task-row::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        /* 确保在极窄屏幕上也能保持三个按钮 */
+        @media (max-width: 360px) {
+            .task-button {
+                flex: 0 0 calc(33.333% - 8px);
+                min-width: 100px;
+                margin: 0 4px;
+            }
+            .task-button button {
+                font-size: 10px;
+                padding: 6px 4px;
+                height: 52px;
+            }
+            .task-button .btn-icon {
+                font-size: 12px;
+            }
         }
         /* 其他功能模块一行两个按钮的样式 */
         .legacy-task-row {
@@ -334,44 +447,40 @@
     
     <div class="container">
         <div class="config-section">
-            <h2 style="font-size: 16px;">📝 配置信息</h2>
-            
-            <div class="config-row">
-                <div class="input-group config-half">
+            <div class="config-container">
+                <div class="config-label">📝 配置信息</div>
+                
+                <div class="input-group config-item">
                     <label for="owner">GitHub用户名：</label>
                     <input type="text" id="owner" placeholder="例如：yourusername" />
                     <div class="help-text">这是你登录GitHub的用户名</div>
                 </div>
                 
-                <div class="input-group config-half">
+                <div class="input-group config-item">
                     <label for="pat">安全密钥 (PAT)：</label>
                     <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
                     <div class="help-text">从GitHub获取的个人访问令牌</div>
                 </div>
-            </div>
-            
-            <div class="config-row">
-                <div class="input-group config-half">
+                
+                <div class="input-group config-item">
                     <label for="repo-karmy">ETF策略仓库：</label>
                     <input type="text" id="repo-karmy" value="fish-etf" />
                     <div class="help-text">例如：fish-etf</div>
                 </div>
                 
-                <div class="input-group config-half">
+                <div class="input-group config-item">
                     <label for="repo-stock">股票分析仓库：</label>
                     <input type="text" id="repo-stock" value="stock-analyse" />
                     <div class="help-text">例如：stock-analyse</div>
                 </div>
-            </div>
-            
-            <div class="config-row">
-                <div class="input-group config-half">
+                
+                <div class="input-group config-item">
                     <label for="repo-push">新股推送仓库：</label>
                     <input type="text" id="repo-push" value="push-new-stock-everyday" />
                     <div class="help-text">例如：push-new-stock-everyday</div>
                 </div>
                 
-                <div class="input-group config-half config-button">
+                <div class="input-group config-item config-button">
                     <button onclick="saveConfig()">💾 保存配置</button>
                 </div>
             </div>

@@ -43,14 +43,6 @@
             gap: 12px;
             margin-bottom: 20px;
         }
-        .btn-primary {
-            background-color: #1a64c0;
-            border-color: #1a64c0;
-        }
-        .btn-primary:hover {
-            background-color: #154e90;
-            border-color: #154e90;
-        }
         .config-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,12 +56,10 @@
             margin-bottom: 5px;
         }
         .example-text {
-            font-size: 0.85rem;
             color: #6c757d;
             margin-top: 5px;
         }
         .help-text {
-            font-size: 0.8rem;
             color: #6c757d;
             margin-top: 5px;
         }
@@ -81,12 +71,10 @@
         }
         .section-icon {
             margin-right: 10px;
-            font-size: 1.2rem;
         }
         .btn-task {
             border-radius: 6px;
             padding: 8px 12px;
-            font-size: 0.85rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,6 +89,28 @@
             width: 100%;
             max-width: 200px;
             margin-top: 15px;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .instructions-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .instructions h3 {
+            margin-bottom: 0;
+            color: #495057;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -292,6 +302,35 @@
                     <i class="bi bi-graph-up"></i> ETF数据爬取
                 </button>
             </div>
+        </div>
+        
+        <!-- 使用说明模块 -->
+        <div class="instructions">
+            <div class="instructions-header">
+                <span class="section-icon">📋</span>
+                <h3>使用说明</h3>
+            </div>
+            <ol>
+                <li><strong>获取安全密钥 (PAT)：</strong>
+                    <p>登录 GitHub → 点击右上角头像 → Settings → 左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)</p>
+                    <p>点击 Generate new token → 填写 Note: multi-project-trigger</p>
+                    <p>勾选权限：repo (全选) 和 workflow</p>
+                    <p>点击 Generate token → 复制生成的密钥</p>
+                </li>
+                <li><strong>填写配置信息：</strong>
+                    <p>你的GitHub用户名：你的账号名</p>
+                    <p>ETF策略仓库：默认值已填好，可修改</p>
+                    <p>新股推送仓库：默认值已填好，可修改</p>
+                    <p>股票分析仓库：默认值已填好，可修改</p>
+                    <p>安全密钥：粘贴复制的密钥</p>
+                    <p>点击 <strong>保存配置</strong></p>
+                </li>
+                <li><strong>触发任务：</strong>
+                    <p>点击对应任务的"触发"按钮</p>
+                    <p>等待1-2分钟，查看结果（微信消息或邮箱）</p>
+                    <p>在对应仓库的 Actions 标签页查看执行状态</p>
+                </li>
+            </ol>
         </div>
     </div>
 

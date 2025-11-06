@@ -3,364 +3,1001 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETF投资策略管理平台</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>多项目触发器</title>
     <style>
-        .container {
-            max-width: 1200px;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            line-height: 1.6; 
+            color: #333; 
+            background: #f5f7fa; 
+            font-size: 13px;
         }
-        .config-section {
-            background-color: #e9f5ff;
-            border-radius: 8px;
-            padding: 20px;
+        h1 { 
+            color: #2c3e50; 
+            text-align: center; 
+            border-bottom: 2px solid #3498db; 
+            padding-bottom: 15px; 
+            margin-bottom: 30px; 
+            font-size: 18px;
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            margin-bottom: 30px; 
+        }
+        .config-section { 
+            background: #e8f4fc; 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            border-left: 4px solid #3498db; 
+        }
+        .task { 
+            margin-bottom: 20px; 
+            padding: 20px; 
+            background: white; 
+            border: 1px solid #e0e6ed; 
+            border-radius: 8px; 
+            transition: all 0.3s ease; 
+        }
+        .task:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
+            border-color: #3498db; 
+        }
+        .task h3 { 
+            color: #2c3e50; 
+            margin-top: 0; 
+            display: flex; 
+            align-items: center; 
+            font-size: 15px;
+        }
+        .task h3:before { 
+            content: "•"; 
+            color: #3498db; 
+            font-size: 24px; 
+            margin-right: 10px; 
+        }
+        .task p { 
+            color: #5a6a7f; 
+            margin: 10px 0 15px; 
+            font-size: 13px;
+        }
+        button { 
+            padding: 12px 15px; 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+            width: 100%;
+            height: 48px;
+            box-sizing: border-box;
+        }
+        button:hover { 
+            background: #2980b9; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3); 
+        }
+        button:disabled { 
+            background: #bdc3c7; 
+            cursor: not-allowed; 
+            transform: none; 
+            box-shadow: none; 
+        }
+        button .icon { 
+            margin-right: 8px; 
+            font-size: 16px; 
+        }
+        .status { 
+            margin-top: 15px; 
+            padding: 10px; 
+            border-radius: 6px; 
+            font-size: 13px; 
+            line-height: 1.5; 
+        }
+        .success { 
+            background-color: #d5f5e3; 
+            color: #27ae60; 
+            border-left: 4px solid #27ae60; 
+        }
+        .error { 
+            background-color: #fadbd8; 
+            color: #c0392b; 
+            border-left: 4px solid #c0392b; 
+        }
+        .info { 
+            background-color: #d6eaf8; 
+            color: #2980b9; 
+            border-left: 4px solid #2980b9; 
+        }
+        .loading { 
+            background-color: #f0f3f7; 
+            color: #7f8c8d; 
+            border-left: 4px solid #7f8c8d; 
+            display: flex; 
+            align-items: center; 
+        }
+        .loading-spinner { 
+            display: inline-block; 
+            width: 18px; 
+            height: 18px; 
+            border: 2px solid rgba(127, 140, 141, 0.2); 
+            border-top: 2px solid #7f8c8d; 
+            border-radius: 50%; 
+            margin-right: 8px; 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { 
+            to { 
+                transform: rotate(360deg); 
+            } 
+        }
+        .input-group { 
             margin-bottom: 25px;
         }
-        .task-section {
-            background-color: #f0f7ff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #2c3e50; 
+            font-size: 13px;
         }
-        .module-title {
-            color: #1a64c0;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        .module-title i {
-            margin-right: 8px;
-        }
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .task-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .config-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-label {
-            font-weight: 500;
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            transition: all 0.3s; 
             margin-bottom: 5px;
         }
-        .example-text {
-            color: #6c757d;
-            margin-top: 5px;
+        input:focus { 
+            border-color: #3498db; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
+            outline: none; 
         }
-        .help-text {
-            color: #6c757d;
-            margin-top: 5px;
+        .help-text { 
+            font-size: 12px; 
+            color: #7f8c8d; 
+            margin-top: 4px; 
         }
-        .section-header {
-            display: flex;
-            align-items: center;
+        .instructions { 
+            background: #f8f9fa; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-top: 30px; 
+            border-left: 4px solid #f1c40f; 
+        }
+        .instructions h3 { 
+            color: #2c3e50; 
+            margin-top: 0; 
+            display: flex; 
+            align-items: center; 
+            font-size: 16px;
+        }
+        .instructions h3:before { 
+            content: "🛈"; 
+            margin-right: 10px; 
+            font-size: 20px; 
+        }
+        .instructions ol { 
+            padding-left: 20px; 
+        }
+        .instructions li { 
+            margin-bottom: 12px; 
+            line-height: 1.5; 
+            font-size: 13px;
+        }
+        .instructions code { 
+            background: #e8f4fc; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: monospace; 
+            font-size: 12px;
+        }
+        footer { 
+            margin-top: 40px; 
+            text-align: center; 
+            color: #7f8c8d; 
+            font-size: 12px; 
+            padding-top: 20px; 
+            border-top: 1px solid #ecf0f1; 
+        }
+        .step-number { 
+            display: inline-block; 
+            width: 22px; 
+            height: 22px; 
+            background: #3498db; 
+            color: white; 
+            border-radius: 50%; 
+            text-align: center; 
+            line-height: 22px; 
+            margin-right: 8px; 
+            font-weight: bold; 
+            font-size: 12px;
+        }
+        .stock-analysis-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .legacy-tasks {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+        .legacy-task {
             margin-bottom: 15px;
-            color: #1a64c0;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
         }
-        .section-icon {
-            margin-right: 10px;
-        }
-        .btn-task {
-            border-radius: 6px;
-            padding: 8px 12px;
+        .legacy-task h3 {
+            color: #2c3e50;
+            margin: 0 0 8px 0;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            height: 100%;
-            white-space: normal;
+        }
+        .legacy-task h3:before {
+            content: "•";
+            color: #bdc3c7;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        /* 两栏布局样式 */
+        .config-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px 25px;
+        }
+        .config-half {
+            flex: 0 0 50%;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        .config-button {
+            display: flex;
+            align-items: flex-end;
+        }
+        /* 手动任务模块样式 */
+        .manual-tasks {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+        .task-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 15px;
+        }
+        .task-button {
+            flex: 0 0 33.333%;
+            padding: 0 10px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        /* 其他功能模块一行两个按钮的样式 */
+        .legacy-task-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 15px;
+        }
+        .legacy-task-button {
+            flex: 0 0 50%;
+            padding: 0 10px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        /* 按钮图标 */
+        .btn-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            vertical-align: middle;
             text-align: center;
         }
-        .btn-task i {
-            margin-right: 5px;
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .config-half, .task-button, .legacy-task-button {
+                flex: 0 0 50%;
+            }
         }
-        .btn-save {
-            width: 100%;
-            max-width: 200px;
-            margin-top: 15px;
-        }
-        .instructions {
-            background-color: #f8f9fa;
-            border-left: 4px solid #ffc107;
-            border-radius: 4px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        .instructions-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .instructions h3 {
-            margin-bottom: 0;
-            color: #495057;
-        }
-        .instructions ol {
-            padding-left: 20px;
-        }
-        .instructions li {
-            margin-bottom: 10px;
+        @media (max-width: 480px) {
+            .config-half, .task-button, .legacy-task-button {
+                flex: 0 0 100%;
+            }
+            button {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <!-- 配置信息模块 -->
+    <h1>🚀 多项目触发器</h1>
+    
+    <div class="container">
         <div class="config-section">
-            <div class="section-header">
-                <span class="section-icon">⚙️</span>
-                <h2 class="module-title">📝 配置信息</h2>
-            </div>
+            <h2 style="font-size: 16px;">📝 配置信息</h2>
             
-            <div class="config-form">
-                <div>
-                    <div class="form-group">
-                        <label class="form-label">GitHub用户名：</label>
-                        <input type="text" id="github-username" class="form-control" placeholder="karmyshunde-sudo">
-                        <small class="help-text">这是你登录GitHub的用户名</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">ETF策略仓库：</label>
-                        <input type="text" id="etf-repo" class="form-control" placeholder="fish-etf">
-                        <small class="example-text">例如：fish-etf</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">新股推送仓库：</label>
-                        <input type="text" id="newstock-repo" class="form-control" placeholder="push-new-stock-everyday">
-                        <small class="example-text">例如：push-new-stock-everyday</small>
-                    </div>
+            <div class="config-row">
+                <div class="input-group config-half">
+                    <label for="owner">GitHub用户名：</label>
+                    <input type="text" id="owner" placeholder="例如：yourusername" />
+                    <div class="help-text">这是你登录GitHub的用户名</div>
                 </div>
                 
-                <div>
-                    <div class="form-group">
-                        <label class="form-label">安全密钥 (PAT)：</label>
-                        <input type="password" id="pat-token" class="form-control" placeholder="************************">
-                        <small class="help-text">从GitHub获取的个人访问令牌</small>
+                <div class="input-group config-half">
+                    <label for="pat">安全密钥 (PAT)：</label>
+                    <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
+                    <div class="help-text">从GitHub获取的个人访问令牌</div>
+                </div>
+            </div>
+            
+            <div class="config-row">
+                <div class="input-group config-half">
+                    <label for="repo-karmy">ETF策略仓库：</label>
+                    <input type="text" id="repo-karmy" value="fish-etf" />
+                    <div class="help-text">例如：fish-etf</div>
+                </div>
+                
+                <div class="input-group config-half">
+                    <label for="repo-stock">股票分析仓库：</label>
+                    <input type="text" id="repo-stock" value="stock-analyse" />
+                    <div class="help-text">例如：stock-analyse</div>
+                </div>
+            </div>
+            
+            <div class="config-row">
+                <div class="input-group config-half">
+                    <label for="repo-push">新股推送仓库：</label>
+                    <input type="text" id="repo-push" value="push-new-stock-everyday" />
+                    <div class="help-text">例如：push-new-stock-everyday</div>
+                </div>
+                
+                <div class="input-group config-half config-button">
+                    <button onclick="saveConfig()">💾 保存配置</button>
+                </div>
+            </div>
+            
+            <div id="config-status" class="status" style="display: none;"></div>
+        </div>
+
+        <h2 style="font-size: 16px; margin-top: 0;">🚀 任务执行</h2>
+        
+        <!-- 股票分析部分现在是第一个任务 -->
+        <div class="task">
+            <h3>【股票】技术分析</h3>
+            <p>对指定股票进行详细技术分析，结果将通过微信推送</p>
+            
+            <div class="stock-analysis-section">
+                <div class="input-group">
+                    <label for="stock_code">股票代码：</label>
+                    <input type="text" id="stock_code" placeholder="例如：002511" value="002511" />
+                    <div class="help-text">输入6位股票代码（如000001），填000000表示测试</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="recipient_email">接收邮箱：</label>
+                    <input type="email" id="recipient_email" placeholder="angel49946491@qq.com" disabled />
+                    <div class="help-text">接收分析报告的邮箱地址（当前功能不可用，未来可恢复）</div>
+                </div>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 150px;">
+                        <button onclick="triggerStockAnalysisViaWechat()">
+                            <span class="btn-icon">📱</span> 结果推送微信
+                        </button>
                     </div>
                     
-                    <div class="form-group">
-                        <label class="form-label">股票分析仓库：</label>
-                        <input type="text" id="stock-repo" class="form-control" placeholder="fish-etf">
-                        <small class="example-text">例如：stock-analyse</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <button id="save-config" class="btn btn-primary btn-save">
-                            <i class="bi bi-save"></i> 保存配置
+                    <div style="flex: 1; min-width: 150px;">
+                        <button disabled>
+                            <span class="btn-icon">📧</span> 结果发送邮件
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 任务执行模块 -->
-        <div class="task-section">
-            <div class="section-header">
-                <span class="section-icon">🚀</span>
-                <h2 class="module-title">任务执行</h2>
-            </div>
-            
-            <div class="task-grid">
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 指数Yes/No策略
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> ETF池策略
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 股票筛选
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 股票分析
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 个股技术分析
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 股票回测
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> ETF套利计算
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> ETF位置计算
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> ETF指数更新
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> ETF数据爬取
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 股票数据爬取
-                </button>
-                <button class="btn btn-outline-primary btn-task">
-                    <i class="bi bi-play-circle"></i> 股票更新
-                </button>
-            </div>
-        </div>
-
-        <!-- 手动任务模块 -->
-        <div class="task-section">
-            <div class="section-header">
-                <span class="section-icon">🔧</span>
-                <h2 class="module-title">手动任务</h2>
-            </div>
-            
-            <div class="task-grid">
-                <button class="btn btn-primary btn-task" data-task="index_yesno">
-                    <i class="bi bi-magic"></i> 手动推送今天新股
-                </button>
-                <button class="btn btn-primary btn-task" data-task="update_etf_list">
-                    <i class="bi bi-magic"></i> 手动推送当前ETF池
-                </button>
-                <button class="btn btn-primary btn-task" data-task="calculate_arbitrage">
-                    <i class="bi bi-magic"></i> 立即计算ETF套利
-                </button>
-                <button class="btn btn-primary btn-task" data-task="update_stock_list">
-                    <i class="bi bi-magic"></i> 新增股票列表强制更新
-                </button>
-                <button class="btn btn-primary btn-task" data-task="stock_ListFilt">
-                    <i class="bi bi-magic"></i> 财务过滤股票列表
-                </button>
-                <button class="btn btn-primary btn-task" data-task="stock_tickten">
-                    <i class="bi bi-magic"></i> 股票四维分析
-                </button>
-                <button class="btn btn-primary btn-task" data-task="crawl_stock_daily">
-                    <i class="bi bi-magic"></i> 股票数据爬取
-                </button>
-                <button class="btn btn-primary btn-task" data-task="stock_threema">
-                    <i class="bi bi-magic"></i> 股票筛选
-                </button>
-                <button class="btn btn-primary btn-task" data-task="stock_backtest">
-                    <i class="bi bi-magic"></i> 股票均线缠绕回测
-                </button>
-                <button class="btn btn-primary btn-task" data-task="analyze_stock">
-                    <i class="bi bi-magic"></i> 个股技术分析
-                </button>
-                <button class="btn btn-primary btn-task" data-task="calculate_position">
-                    <i class="bi bi-magic"></i> ETF位置计算
-                </button>
-            </div>
-        </div>
-
-        <!-- 其他功能模块 -->
-        <div class="task-section">
-            <div class="section-header">
-                <span class="section-icon">🛠️</span>
-                <h2 class="module-title">其他功能</h2>
-            </div>
-            
-            <div class="task-grid-2">
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 执行ETF稳健仓策略
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> ETF买卖信号
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> ETF位置计算
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> ETF套利分析
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 股票筛选信号
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 个股技术分析
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 股票回测
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 股票四维分析
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 股票财务过滤
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> 股票数据更新
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> ETF指数更新
-                </button>
-                <button class="btn btn-outline-secondary btn-task">
-                    <i class="bi bi-graph-up"></i> ETF数据爬取
-                </button>
+                
+                <div id="stock-status" class="status" style="display: none;"></div>
             </div>
         </div>
         
-        <!-- 使用说明模块 -->
-        <div class="instructions">
-            <div class="instructions-header">
-                <span class="section-icon">📋</span>
-                <h3>使用说明</h3>
+        <div class="task">
+            <h3>【新股】手动推送测试</h3>
+            <p>向微信推送测试消息，验证消息通道是否正常</p>
+            <button onclick="triggerNewStockTask('test_push')">
+                <span class="btn-icon">📤</span> 触发测试
+            </button>
+            <div id="new-stock-status" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="task">
+            <h3>【ETF】手动推送当前ETF池</h3>
+            <p>推送当前有效的ETF股票池到微信</p>
+            <button onclick="triggerTask('karmy')">
+                <span class="btn-icon">📊</span> 触发推送
+            </button>
+            <div id="karmy-status" class="status" style="display: none;"></div>
+        </div>
+        
+        <!-- 新增手动任务模块 -->
+        <div class="manual-tasks">
+            <h2 style="font-size: 16px; margin-top: 0;">⚙️ 手动任务</h2>
+            
+            <div class="task-row">
+                <div class="task-button">
+                    <button onclick="triggerNewStockTask('test_push')">
+                        <span class="btn-icon">📤</span> 手动推送今天新股
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerTask('karmy')">
+                        <span class="btn-icon">📊</span> 手动推送当前ETF池
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('calculate_arbitrage')">
+                        <span class="btn-icon">🔍</span> 立即计算ETF套利
+                    </button>
+                </div>
             </div>
+            
+            <div class="task-row">
+                <div class="task-button">
+                    <button onclick="triggerManualTask('index_yesno')">
+                        <span class="btn-icon">📈</span> 指数涨跌判断
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('update_stock_list')">
+                        <span class="btn-icon">🔄</span> 更新股票列表
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('stock_ListFilt')">
+                        <span class="btn-icon">🧹</span> 财务过滤股票列表
+                    </button>
+                </div>
+            </div>
+            
+            <div class="task-row">
+                <div class="task-button">
+                    <button onclick="triggerManualTask('stock_tickten')">
+                        <span class="btn-icon">⏱️</span> 股票十档行情
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('crawl_stock_daily')">
+                        <span class="btn-icon">📥</span> 爬取股票日线数据
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('stock_threema')">
+                        <span class="btn-icon">📊</span> MACD均线策略
+                    </button>
+                </div>
+            </div>
+            
+            <div class="task-row">
+                <div class="task-button">
+                    <button onclick="triggerManualTask('stock_backtest')">
+                        <span class="btn-icon">🔙</span> 股票均线缠绕回测
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('analyze_stock')">
+                        <span class="btn-icon">📈</span> 个股技术分析
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('update_etf_list')">
+                        <span class="btn-icon">🔄</span> 更新ETF列表
+                    </button>
+                </div>
+            </div>
+            
+            <div class="task-row">
+                <div class="task-button">
+                    <button onclick="triggerManualTask('crawl_etf_daily')">
+                        <span class="btn-icon">📥</span> 爬取ETF日线数据
+                    </button>
+                </div>
+                <div class="task-button">
+                    <button onclick="triggerManualTask('calculate_position')">
+                        <span class="btn-icon">📊</span> 计算ETF仓位
+                    </button>
+                </div>
+            </div>
+            
+            <div id="manual-task-status" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="legacy-tasks">
+            <h2 style="font-size: 16px; margin-top: 0;">其他功能（仅保留）</h2>
+            
+            <div class="legacy-task-row">
+                <div class="legacy-task-button">
+                    <button disabled>
+                        <span class="btn-icon">🤖</span> 执行ETF稳健仓策略
+                    </button>
+                    <div class="status info" style="margin-top: 8px;">此功能已迁移至对应项目</div>
+                </div>
+                <div class="legacy-task-button">
+                    <button disabled>
+                        <span class="btn-icon">🔄</span> 手动重置所有仓位
+                    </button>
+                    <div class="status info" style="margin-top: 8px;">此功能已迁移至对应项目</div>
+                </div>
+            </div>
+            
+            <div class="legacy-task-row">
+                <div class="legacy-task-button">
+                    <button disabled>
+                        <span class="btn-icon">💹</span> 手动推送新股信息
+                    </button>
+                    <div class="status info" style="margin-top: 8px;">此功能已迁移至对应项目</div>
+                </div>
+                <div class="legacy-task-button">
+                    <button disabled>
+                        <span class="btn-icon">🔍</span> 手动套利扫描
+                    </button>
+                    <div class="status info" style="margin-top: 8px;">此功能已迁移至对应项目</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>使用说明</h3>
             <ol>
-                <li><strong>获取安全密钥 (PAT)：</strong>
-                    <p>登录 GitHub → 点击右上角头像 → Settings → 左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)</p>
-                    <p>点击 Generate new token → 填写 Note: multi-project-trigger</p>
-                    <p>勾选权限：repo (全选) 和 workflow</p>
-                    <p>点击 Generate token → 复制生成的密钥</p>
+                <li>
+                    <strong>获取安全密钥 (PAT)：</strong>
+                    <br>登录 GitHub → 点击右上角头像 → Settings → 左侧菜单 → Developer settings → Personal access tokens → Tokens (classic)
+                    <br>点击 Generate new token → 填写 Note: multi-project-trigger
+                    <br>勾选权限：repo (全选) 和 workflow
+                    <br>点击 Generate token → 复制生成的密钥
                 </li>
-                <li><strong>填写配置信息：</strong>
-                    <p>你的GitHub用户名：你的账号名</p>
-                    <p>ETF策略仓库：默认值已填好，可修改</p>
-                    <p>新股推送仓库：默认值已填好，可修改</p>
-                    <p>股票分析仓库：默认值已填好，可修改</p>
-                    <p>安全密钥：粘贴复制的密钥</p>
-                    <p>点击 <strong>保存配置</strong></p>
+                <li>
+                    <strong>填写配置信息：</strong>
+                    <br>你的GitHub用户名：你的账号名
+                    <br>仓库名称：默认值已填好，可修改
+                    <br>安全密钥：粘贴复制的密钥
+                    <br>点击 <strong>保存配置</strong>
                 </li>
-                <li><strong>触发任务：</strong>
-                    <p>点击对应任务的"触发"按钮</p>
-                    <p>等待1-2分钟，查看结果（微信消息或邮箱）</p>
-                    <p>在对应仓库的 Actions 标签页查看执行状态</p>
+                <li>
+                    <strong>触发任务：</strong>
+                    <br>点击对应任务的"触发"按钮
+                    <br>等待1-2分钟，查看结果（微信消息或邮箱）
+                    <br>在对应仓库的 Actions 标签页查看执行状态
                 </li>
             </ol>
         </div>
     </div>
+    
+    <footer>
+        🚀 多项目触发器 | 统一管理多个量化项目 | GitHub部署方案<br>
+        安全提示：密钥仅保存在你的浏览器中，不会发送到任何服务器
+    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 保存配置按钮事件
-        document.getElementById('save-config').addEventListener('click', function() {
-            const username = document.getElementById('github-username').value;
-            const pat = document.getElementById('pat-token').value;
-            const etfRepo = document.getElementById('etf-repo').value;
-            const stockRepo = document.getElementById('stock-repo').value;
-            const newstockRepo = document.getElementById('newstock-repo').value;
+        // 保存配置到本地存储
+        function saveConfig() {
+            const owner = document.getElementById('owner').value.trim();
+            const repoPush = document.getElementById('repo-push').value.trim();
+            const repoKarmy = document.getElementById('repo-karmy').value.trim();
+            const repoStock = document.getElementById('repo-stock').value.trim();
+            const pat = document.getElementById('pat').value.trim();
             
-            if (!username || !pat || !etfRepo || !stockRepo || !newstockRepo) {
+            if (!owner || !repoPush || !repoKarmy || !repoStock || !pat) {
                 alert('请填写所有配置信息！');
                 return;
             }
             
-            // 保存配置逻辑（这里只是示例）
-            alert('配置已保存！');
-        });
+            // 保存到本地存储
+            const config = {
+                owner: owner,
+                repoPush: repoPush,
+                repoKarmy: repoKarmy,
+                repoStock: repoStock,
+                pat: pat
+            };
+            
+            localStorage.setItem('multi_project_config', JSON.stringify(config));
+            
+            // 显示成功消息
+            const statusDiv = document.getElementById('config-status');
+            statusDiv.textContent = '✓ 配置已保存！';
+            statusDiv.className = 'status success';
+            statusDiv.style.display = 'block';
+            
+            // 3秒后消失
+            setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+        }
 
-        // 手动任务按钮事件
-        document.querySelectorAll('.btn-task[data-task]').forEach(button => {
-            button.addEventListener('click', function() {
-                const task = this.getAttribute('data-task');
-                // 这里应该调用相应的API或工作流
-                console.log(`触发任务: ${task}`);
-                alert(`正在触发任务: ${task}`);
-            });
+        // 更新任务状态显示
+        function updateStatus(task, status, className, message) {
+            const statusDiv = document.getElementById(`${task}-status`);
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${className}`;
+            statusDiv.style.display = 'block';
+        }
+
+        // 触发任务（ETF策略）
+        async function triggerTask(taskType) {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, pat } = config;
+            let repoName;
+            let workflowTask;
+            
+            if (taskType === 'karmy') {
+                repoName = config.repoKarmy;
+                workflowTask = 'calculate_position';
+            } else {
+                return;
+            }
+            
+            // 验证配置
+            if (!owner || !repoName || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 更新状态
+            updateStatus(taskType, 'loading', 'loading', '正在触发任务...');
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找主工作流（ETF策略）
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name.includes('ETF数据爬取与策略推送')
+                );
+                
+                if (!mainWorkflow) {
+                    throw new Error('未找到ETF策略工作流');
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { task: workflowTask }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    updateStatus(taskType, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                updateStatus(taskType, 'error', 'error', `❌ 错误: ${error.message}`);
+            }
+        }
+        
+        // 触发新股推送任务
+        async function triggerNewStockTask(taskType) {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, pat } = config;
+            const repoName = config.repoPush;
+            
+            // 验证配置
+            if (!owner || !repoName || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 更新状态
+            updateStatus('new-stock', 'loading', 'loading', '正在触发新股推送任务...');
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找新股推送工作流
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name === '新股信息推送任务（仅时间判断）新增5分钟定时测试任务'
+                );
+                
+                if (!mainWorkflow) {
+                    throw new Error('未找到新股推送工作流');
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { task: taskType }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    updateStatus('new-stock', 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信消息');
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                updateStatus('new-stock', 'error', 'error', `❌ 错误: ${error.message}`);
+            }
+        }
+        
+        // 触发股票分析任务（微信推送）
+        async function triggerStockAnalysisViaWechat() {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, pat } = config;
+            const repoName = config.repoKarmy;  // 使用ETF策略仓库
+            
+            // 获取用户输入
+            let stockCode = document.getElementById('stock_code').value.trim();
+            
+            // 验证配置
+            if (!owner || !repoName || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 确定任务类型
+            let task = 'analyze_stock';
+            if (stockCode === '000000') {
+                task = 'analyze_stock';
+                stockCode = '000001'; // 使用测试股票代码
+                document.getElementById('stock_code').value = stockCode;
+            }
+            
+            // 更新状态
+            updateStatus('stock', 'loading', 'loading', '正在触发技术分析任务...');
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找个股技术分析工作流
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name === '4-手动任务'
+                );
+                
+                if (!mainWorkflow) {
+                    // 显示可用的工作流列表
+                    const availableWorkflows = workflowsData.workflows.map(w => w.name).join(', ');
+                    throw new Error(`未找到"4-手动任务"工作流。可用工作流: ${availableWorkflows}`);
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { 
+                            task: task,
+                            stock_code: stockCode  // 仅传递6位股票代码
+                        }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    updateStatus('stock', 'success', 'success', '✅ 触发成功！请等待2-3分钟查看微信消息');
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                updateStatus('stock', 'error', 'error', `❌ 错误: ${error.message}`);
+            }
+        }
+        
+        // 新增：触发手动任务
+        async function triggerManualTask(taskType) {
+            // 检查配置是否已保存
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (!savedConfig) {
+                alert('请先填写并保存配置信息！');
+                return;
+            }
+            
+            const config = JSON.parse(savedConfig);
+            const { owner, pat } = config;
+            const repoName = config.repoKarmy;  // 使用ETF策略仓库
+            
+            // 验证配置
+            if (!owner || !repoName || !pat) {
+                alert('配置信息不完整，请重新填写并保存！');
+                return;
+            }
+            
+            // 更新状态
+            const statusDiv = document.getElementById('manual-task-status');
+            statusDiv.textContent = '正在触发任务...';
+            statusDiv.className = 'status loading';
+            statusDiv.style.display = 'block';
+            
+            try {
+                // 1. 获取工作流ID
+                const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
+                const workflowsResponse = await fetch(workflowsUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                
+                if (!workflowsResponse.ok) {
+                    const errorData = await workflowsResponse.json();
+                    throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
+                }
+                
+                const workflowsData = await workflowsResponse.json();
+                
+                // 查找手动任务工作流
+                const mainWorkflow = workflowsData.workflows.find(
+                    w => w.name === '4-手动任务'
+                );
+                
+                if (!mainWorkflow) {
+                    // 显示可用的工作流列表
+                    const availableWorkflows = workflowsData.workflows.map(w => w.name).join(', ');
+                    throw new Error(`未找到"4-手动任务"工作流。可用工作流: ${availableWorkflows}`);
+                }
+                
+                const workflowId = mainWorkflow.id;
+                
+                // 2. 触发工作流
+                const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
+                const dispatchResponse = await fetch(dispatchUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pat}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: { task: taskType }
+                    })
+                });
+                
+                if (dispatchResponse.status === 204) {
+                    statusDiv.textContent = '✅ 触发成功！请等待1-2分钟查看结果';
+                    statusDiv.className = 'status success';
+                } else {
+                    const errorText = await dispatchResponse.text();
+                    throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
+                }
+                
+            } catch (error) {
+                console.error('触发错误:', error);
+                statusDiv.textContent = `❌ 错误: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        }
+
+        // 页面加载时检查保存的配置
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedConfig = localStorage.getItem('multi_project_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('owner').value = config.owner || '';
+                document.getElementById('repo-push').value = config.repoPush || 'push-new-stock-everyday';
+                document.getElementById('repo-karmy').value = config.repoKarmy || 'fish-etf';
+                document.getElementById('repo-stock').value = config.repoStock || 'stock-analyse';
+                document.getElementById('pat').value = config.pat || '';
+                
+                // 显示配置已加载
+                const statusDiv = document.getElementById('config-status');
+                statusDiv.textContent = '✓ 已载保存的配置';
+                statusDiv.className = 'status info';
+                statusDiv.style.display = 'block';
+                
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+            }
         });
     </script>
 </body>

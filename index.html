@@ -269,12 +269,16 @@
             grid-template-columns: 1fr 1fr;
             gap: 25px;
             margin-bottom: 0;
+            /* 关键修改：确保每行有最小高度，使flex-end对齐有效 */
+            grid-auto-rows: minmax(100px, auto);
         }
         .config-item {
             display: flex;
             flex-direction: column;
             margin-bottom: 15px;
             padding: 0;
+            /* 关键修改：确保所有输入项高度一致 */
+            height: 100%;
         }
         .config-label {
             grid-column: 1 / -1;
@@ -319,6 +323,7 @@
         /* 按钮对齐 - 确保与输入框X坐标完全一致 */
         .config-button {
             display: flex;
+            /* 关键修改：使用flex-end实现底部对齐 */
             align-items: flex-end;
             height: 100%;
             padding: 0;

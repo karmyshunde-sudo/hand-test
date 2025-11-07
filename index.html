@@ -96,17 +96,6 @@
             transform: none; 
             box-shadow: none; 
         }
-        /* 新增的禁用状态样式 */
-        button:disabled:not(.btn-disabled-permanent) {
-            opacity: 0.7;
-            cursor: wait;
-            animation: button-disabled 2s forwards;
-        }
-        @keyframes button-disabled {
-            0% { opacity: 0.7; }
-            50% { opacity: 0.9; }
-            100% { opacity: 0.7; }
-        }
         button .icon { 
             margin-right: 8px; 
             font-size: 16px; 
@@ -552,7 +541,7 @@
                     <div id="manual-newstock-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-etf-pool" onclick="triggerTask('karmy', 'manual-etf-pool-status')">
+                    <button id="btn-manual-etf-pool" onclick="triggerManualTask('update_etf_list', 'manual-etf-pool-status')">
                         <span class="btn-icon">📊</span> 手动推送当前ETF池
                     </button>
                     <div id="manual-etf-pool-status" class="status" style="display: none;"></div>
@@ -706,6 +695,22 @@
         const CLICK_COOLDOWN = 60000; // 1分钟
         const BUTTON_DISABLE_TIME = 2000; // 2秒
         
+        // 工作流名称映射表 - 所有任务名称在这里统一管理
+        const WORKFLOW_TASKS = {
+            'index_yesno': 'index-yesno-manual',
+            'update_stock_list': 'update-stock-list-manual',
+            'stock_ListFilt': 'stock-ListFilt-manual',
+            'stock_tickten': 'stock-tickten-manual',
+            'crawl_stock_daily': 'crawl-stock-daily-manual',
+            'stock_threema': 'stock-threema-manual',
+            'stock_backtest': 'stock-backtest-manual',
+            'analyze_stock': 'analyze-stock-manual',
+            'update_etf_list': 'update-etf-list-manual',
+            'crawl_etf_daily': 'crawl-etf-daily-manual',
+            'calculate_arbitrage': 'calculate-arbitrage-manual',
+            'calculate_position': 'calculate-position-manual'
+        };
+        
         // 检查是否在冷却期内
         function isButtonDisabled() {
             const now = Date.now();
@@ -766,7 +771,7 @@
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }
 
-        // 更新任务状态显示 - 修改了此函数，使其接收状态区域ID
+        // 更新任务状态显示
         function updateStatus(statusDivId, status, className, message) {
             const statusDiv = document.getElementById(statusDivId);
             if (!statusDiv) {
@@ -1121,6 +1126,12 @@
             }
             
             try {
+                // 获取对应的工作流名称
+                const workflowName = WORKFLOW_TASKS[taskType];
+                if (!workflowName) {
+                    throw new Error(`未知的任务类型: ${taskType}`);
+                }
+                
                 // 1. 获取工作流ID
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
                 const workflowsResponse = await fetch(workflowsUrl, {

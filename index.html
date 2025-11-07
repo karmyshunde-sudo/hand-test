@@ -533,6 +533,7 @@
         <!-- 新增手动任务模块 -->
         <div class="manual-tasks">
             <h2 style="font-size: 16px; margin-top: 0;">⚙️ 手动任务</h2>
+            <!-- 第一行按钮：1、2、3 -->
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-newstock" onclick="triggerNewStockTask('test_push', 'manual-newstock-status')">
@@ -541,59 +542,27 @@
                     <div id="manual-newstock-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-etf-pool" onclick="triggerManualTask('update_etf_list', 'manual-etf-pool-status')">
-                        <span class="btn-icon">📊</span> 手动推送当前ETF池
-                    </button>
-                    <div id="manual-etf-pool-status" class="status" style="display: none;"></div>
-                </div>
-                <div class="task-button">
-                    <button id="btn-manual-arbitrage" onclick="triggerManualTask('calculate_arbitrage', 'manual-arbitrage-status')">
-                        <span class="btn-icon">🔍</span> 立即计算ETF套利
-                    </button>
-                    <div id="manual-arbitrage-status" class="status" style="display: none;"></div>
-                </div>
-            </div>
-            <div class="task-row">
-                <div class="task-button">
                     <button id="btn-manual-index-yesno" onclick="triggerManualTask('index_yesno', 'manual-index-yesno-status')">
-                        <span class="btn-icon">📈</span> 指数涨跌判断
+                        <span class="btn-icon">📈</span> 指数Yes/No策略
                     </button>
                     <div id="manual-index-yesno-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-update-stock-list" onclick="triggerManualTask('update_stock_list', 'manual-update-stock-list-status')">
-                        <span class="btn-icon">🔄</span> 更新股票列表
-                    </button>
-                    <div id="manual-update-stock-list-status" class="status" style="display: none;"></div>
-                </div>
-                <div class="task-button">
-                    <button id="btn-manual-stock-filter" onclick="triggerManualTask('stock_ListFilt', 'manual-stock-filter-status')">
-                        <span class="btn-icon">🧹</span> 财务过滤股票列表
-                    </button>
-                    <div id="manual-stock-filter-status" class="status" style="display: none;"></div>
-                </div>
-            </div>
-            <div class="task-row">
-                <div class="task-button">
-                    <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten', 'manual-stock-tickten-status')">
-                        <span class="btn-icon">⏱️</span> 股票十档行情
-                    </button>
-                    <div id="manual-stock-tickten-status" class="status" style="display: none;"></div>
-                </div>
-                <div class="task-button">
-                    <button id="btn-manual-crawl-stock" onclick="triggerManualTask('crawl_stock_daily', 'manual-crawl-stock-status')">
-                        <span class="btn-icon">📥</span> 爬取股票日线数据
-                    </button>
-                    <div id="manual-crawl-stock-status" class="status" style="display: none;"></div>
-                </div>
-                <div class="task-button">
                     <button id="btn-manual-stock-threema" onclick="triggerManualTask('stock_threema', 'manual-stock-threema-status')">
-                        <span class="btn-icon">📊</span> MACD均线策略
+                        <span class="btn-icon">📊</span> 股票3均线缠绕策略
                     </button>
                     <div id="manual-stock-threema-status" class="status" style="display: none;"></div>
                 </div>
             </div>
+            
+            <!-- 第二行按钮：4、5、6 -->
             <div class="task-row">
+                <div class="task-button">
+                    <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten', 'manual-stock-tickten-status')">
+                        <span class="btn-icon">⏱️</span> 股票MA20行情
+                    </button>
+                    <div id="manual-stock-tickten-status" class="status" style="display: none;"></div>
+                </div>
                 <div class="task-button">
                     <button id="btn-manual-stock-backtest" onclick="triggerManualTask('stock_backtest', 'manual-stock-backtest-status')">
                         <span class="btn-icon">🔙</span> 股票均线缠绕回测
@@ -606,25 +575,65 @@
                     </button>
                     <div id="manual-analyze-stock-status" class="status" style="display: none;"></div>
                 </div>
-                <div class="task-button">
-                    <button id="btn-manual-update-etf-list" onclick="triggerManualTask('update_etf_list', 'manual-update-etf-list-status')">
-                        <span class="btn-icon">🔄</span> 更新ETF列表
-                    </button>
-                    <div id="manual-update-etf-list-status" class="status" style="display: none;"></div>
-                </div>
             </div>
+            
+            <!-- 第三行按钮：7、8、9 -->
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily', 'manual-crawl-etf-status')">
-                        <span class="btn-icon">📥</span> 爬取ETF日线数据
+                    <button id="btn-manual-etf-pool" onclick="triggerManualTask('update_etf_list', 'manual-etf-pool-status')">
+                        <span class="btn-icon">📊</span> 手动推送当前ETF池
                     </button>
-                    <div id="manual-crawl-etf-status" class="status" style="display: none;"></div>
+                    <div id="manual-etf-pool-status" class="status" style="display: none;"></div>
+                </div>
+                <div class="task-button">
+                    <button id="btn-manual-arbitrage" onclick="triggerManualTask('calculate_arbitrage', 'manual-arbitrage-status')">
+                        <span class="btn-icon">🔍</span> 立即计算ETF套利
+                    </button>
+                    <div id="manual-arbitrage-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
                     <button id="btn-manual-calculate-position" onclick="triggerManualTask('calculate_position', 'manual-calculate-position-status')">
                         <span class="btn-icon">📊</span> 计算ETF仓位
                     </button>
                     <div id="manual-calculate-position-status" class="status" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- 第四行按钮：10、11、12 -->
+            <div class="task-row">
+                <div class="task-button">
+                    <button id="btn-manual-update-stock-list" onclick="triggerManualTask('update_stock_list', 'manual-update-stock-list-status')">
+                        <span class="btn-icon">🔄</span> 强制更新股票列表
+                    </button>
+                    <div id="manual-update-stock-list-status" class="status" style="display: none;"></div>
+                </div>
+                <div class="task-button">
+                    <button id="btn-manual-stock-filter" onclick="triggerManualTask('stock_ListFilt', 'manual-stock-filter-status')">
+                        <span class="btn-icon">🧹</span> 财务过滤股票列表
+                    </button>
+                    <div id="manual-stock-filter-status" class="status" style="display: none;"></div>
+                </div>
+                <div class="task-button">
+                    <button id="btn-manual-crawl-stock" onclick="triggerManualTask('crawl_stock_daily', 'manual-crawl-stock-status')">
+                        <span class="btn-icon">📥</span> 爬取股票日线数据
+                    </button>
+                    <div id="manual-crawl-stock-status" class="status" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- 第五行按钮：13、14 -->
+            <div class="task-row">
+                <div class="task-button">
+                    <button id="btn-manual-update-etf-list" onclick="triggerManualTask('update_etf_list', 'manual-update-etf-list-status')">
+                        <span class="btn-icon">🔄</span> 更新ETF列表
+                    </button>
+                    <div id="manual-update-etf-list-status" class="status" style="display: none;"></div>
+                </div>
+                <div class="task-button">
+                    <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily', 'manual-crawl-etf-status')">
+                        <span class="btn-icon">📥</span> 爬取ETF日线数据
+                    </button>
+                    <div id="manual-crawl-etf-status" class="status" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -694,7 +703,6 @@
         let lastClickTime = 0;
         const CLICK_COOLDOWN = 60000; // 1分钟
         const BUTTON_DISABLE_TIME = 2000; // 2秒
-        
         // 工作流名称映射表 - 所有任务名称在这里统一管理
         const WORKFLOW_TASKS = {
             'index_yesno': 'index-yesno-manual',
@@ -710,25 +718,21 @@
             'calculate_arbitrage': 'calculate-arbitrage-manual',
             'calculate_position': 'calculate-position-manual'
         };
-        
         // 检查是否在冷却期内
         function isButtonDisabled() {
             const now = Date.now();
             return (now - lastClickTime) < CLICK_COOLDOWN;
         }
-        
         // 更新上次点击时间
         function updateLastClickTime() {
             lastClickTime = Date.now();
         }
-        
         // 禁用按钮并添加临时效果
         function disableButton(button, disableTime = BUTTON_DISABLE_TIME) {
             button.disabled = true;
             // 添加禁用样式
             button.style.opacity = '0.7';
             button.style.cursor = 'wait';
-            
             // 2秒后恢复
             setTimeout(() => {
                 button.disabled = false;
@@ -736,7 +740,6 @@
                 button.style.cursor = 'pointer';
             }, disableTime);
         }
-        
         // 保存配置到本地存储
         function saveConfig() {
             const owner = document.getElementById('owner').value.trim();
@@ -744,12 +747,10 @@
             const repoKarmy = document.getElementById('repo-karmy').value.trim();
             const repoStock = document.getElementById('repo-stock').value.trim();
             const pat = document.getElementById('pat').value.trim();
-            
             if (!owner || !repoPush || !repoKarmy || !repoStock || !pat) {
                 alert('请填写所有配置信息！');
                 return;
             }
-            
             // 保存到本地存储
             const config = {
                 owner: owner,
@@ -758,19 +759,15 @@
                 repoStock: repoStock,
                 pat: pat
             };
-            
             localStorage.setItem('multi_project_config', JSON.stringify(config));
-            
             // 显示成功消息
             const statusDiv = document.getElementById('config-status');
             statusDiv.textContent = '✓ 配置已保存！';
             statusDiv.className = 'status success';
             statusDiv.style.display = 'block';
-            
             // 3秒后消失
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }
-
         // 更新任务状态显示
         function updateStatus(statusDivId, status, className, message) {
             const statusDiv = document.getElementById(statusDivId);
@@ -778,12 +775,10 @@
                 console.error(`Status div with ID ${statusDivId} not found`);
                 return;
             }
-            
             statusDiv.textContent = message;
             statusDiv.className = `status ${className}`;
             statusDiv.style.display = 'block';
         }
-
         // 触发任务（ETF策略）
         async function triggerTask(taskType, statusDivId = 'karmy-status') {
             // 检查是否在冷却期内
@@ -791,43 +786,35 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
-            
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
             });
-            
             // 更新点击时间
             updateLastClickTime();
-            
             // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
                 return;
             }
-            
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
             let repoName;
             let workflowTask;
-            
             if (taskType === 'karmy') {
                 repoName = config.repoKarmy;
                 workflowTask = 'calculate_position';
             } else {
                 return;
             }
-            
             // 验证配置
             if (!owner || !repoName || !pat) {
                 alert('配置信息不完整，请重新填写并保存！');
                 return;
             }
-            
             // 更新状态 - 使用传入的statusDivId
             updateStatus(statusDivId, 'loading', 'loading', '正在触发任务...');
-            
             try {
                 // 1. 获取工作流ID
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
@@ -837,25 +824,19 @@
                         'Accept': 'application/vnd.github+json'
                     }
                 });
-                
                 if (!workflowsResponse.ok) {
                     const errorData = await workflowsResponse.json();
                     throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
                 }
-                
                 const workflowsData = await workflowsResponse.json();
-                
                 // 查找主工作流（ETF策略）
                 const mainWorkflow = workflowsData.workflows.find(
                     w => w.name.includes('ETF数据爬取与策略推送')
                 );
-                
                 if (!mainWorkflow) {
                     throw new Error('未找到ETF策略工作流');
                 }
-                
                 const workflowId = mainWorkflow.id;
-                
                 // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
@@ -870,20 +851,17 @@
                         inputs: { task: workflowTask }
                     })
                 });
-                
                 if (dispatchResponse.status === 204) {
                     updateStatus(statusDivId, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
                 }
-                
             } catch (error) {
                 console.error('触发错误:', error);
                 updateStatus(statusDivId, 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
-        
         // 触发新股推送任务
         async function triggerNewStockTask(taskType, statusDivId = 'new-stock-status') {
             // 检查是否在冷却期内
@@ -891,35 +869,28 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
-            
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
             });
-            
             // 更新点击时间
             updateLastClickTime();
-            
             // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
                 return;
             }
-            
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
             const repoName = config.repoPush;
-            
             // 验证配置
             if (!owner || !repoName || !pat) {
                 alert('配置信息不完整，请重新填写并保存！');
                 return;
             }
-            
             // 更新状态 - 使用传入的statusDivId
             updateStatus(statusDivId, 'loading', 'loading', '正在触发新股推送任务...');
-            
             try {
                 // 1. 获取工作流ID
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
@@ -929,25 +900,19 @@
                         'Accept': 'application/vnd.github+json'
                     }
                 });
-                
                 if (!workflowsResponse.ok) {
                     const errorData = await workflowsResponse.json();
                     throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
                 }
-                
                 const workflowsData = await workflowsResponse.json();
-                
                 // 查找新股推送工作流
                 const mainWorkflow = workflowsData.workflows.find(
                     w => w.name === '新股信息推送任务（仅时间判断）新增5分钟定时测试任务'
                 );
-                
                 if (!mainWorkflow) {
                     throw new Error('未找到新股推送工作流');
                 }
-                
                 const workflowId = mainWorkflow.id;
-                
                 // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
@@ -962,20 +927,17 @@
                         inputs: { task: taskType }
                     })
                 });
-                
                 if (dispatchResponse.status === 204) {
                     updateStatus(statusDivId, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信消息');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
                 }
-                
             } catch (error) {
                 console.error('触发错误:', error);
                 updateStatus(statusDivId, 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
-        
         // 触发股票分析任务（微信推送）
         async function triggerStockAnalysisViaWechat() {
             // 检查是否在冷却期内
@@ -983,35 +945,28 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
-            
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
             });
-            
             // 更新点击时间
             updateLastClickTime();
-            
             // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
                 return;
             }
-            
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
             const repoName = config.repoKarmy;  // 使用ETF策略仓库
-            
             // 获取用户输入
             let stockCode = document.getElementById('stock_code').value.trim();
-            
             // 验证配置
             if (!owner || !repoName || !pat) {
                 alert('配置信息不完整，请重新填写并保存！');
                 return;
             }
-            
             // 确定任务类型
             let task = 'analyze_stock';
             if (stockCode === '000000') {
@@ -1019,10 +974,8 @@
                 stockCode = '000001'; // 使用测试股票代码
                 document.getElementById('stock_code').value = stockCode;
             }
-            
             // 更新状态 - 使用固定的stock-status
             updateStatus('stock-status', 'loading', 'loading', '正在触发技术分析任务...');
-            
             try {
                 // 1. 获取工作流ID
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
@@ -1032,27 +985,21 @@
                         'Accept': 'application/vnd.github+json'
                     }
                 });
-                
                 if (!workflowsResponse.ok) {
                     const errorData = await workflowsResponse.json();
                     throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
                 }
-                
                 const workflowsData = await workflowsResponse.json();
-                
                 // 查找个股技术分析工作流
                 const mainWorkflow = workflowsData.workflows.find(
                     w => w.name === '4-手动任务'
                 );
-                
                 if (!mainWorkflow) {
                     // 显示可用的工作流列表
                     const availableWorkflows = workflowsData.workflows.map(w => w.name).join(', ');
                     throw new Error(`未找到"4-手动任务"工作流。可用工作流: ${availableWorkflows}`);
                 }
-                
                 const workflowId = mainWorkflow.id;
-                
                 // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
@@ -1070,20 +1017,17 @@
                         }
                     })
                 });
-                
                 if (dispatchResponse.status === 204) {
                     updateStatus('stock-status', 'success', 'success', '✅ 触发成功！请等待2-3分钟查看微信消息');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
                 }
-                
             } catch (error) {
                 console.error('触发错误:', error);
                 updateStatus('stock-status', 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
-        
         // 新增：触发手动任务
         async function triggerManualTask(taskType, statusDivId = 'manual-task-status') {
             // 检查是否在冷却期内
@@ -1091,32 +1035,26 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
-            
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
             });
-            
             // 更新点击时间
             updateLastClickTime();
-            
             // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
                 return;
             }
-            
             const config = JSON.parse(savedConfig);
             const { owner, pat } = config;
             const repoName = config.repoKarmy;  // 使用ETF策略仓库
-            
             // 验证配置
             if (!owner || !repoName || !pat) {
                 alert('配置信息不完整，请重新填写并保存！');
                 return;
             }
-            
             // 更新状态 - 使用传入的statusDivId
             const statusDiv = document.getElementById(statusDivId);
             if (statusDiv) {
@@ -1124,14 +1062,12 @@
                 statusDiv.className = 'status loading';
                 statusDiv.style.display = 'block';
             }
-            
             try {
                 // 获取对应的工作流名称
                 const workflowName = WORKFLOW_TASKS[taskType];
                 if (!workflowName) {
                     throw new Error(`未知的任务类型: ${taskType}`);
                 }
-                
                 // 1. 获取工作流ID
                 const workflowsUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows`;
                 const workflowsResponse = await fetch(workflowsUrl, {
@@ -1140,27 +1076,21 @@
                         'Accept': 'application/vnd.github+json'
                     }
                 });
-                
                 if (!workflowsResponse.ok) {
                     const errorData = await workflowsResponse.json();
                     throw new Error(`获取工作流失败: ${workflowsResponse.status} - ${errorData.message}`);
                 }
-                
                 const workflowsData = await workflowsResponse.json();
-                
                 // 查找手动任务工作流
                 const mainWorkflow = workflowsData.workflows.find(
                     w => w.name === '4-手动任务'
                 );
-                
                 if (!mainWorkflow) {
                     // 显示可用的工作流列表
                     const availableWorkflows = workflowsData.workflows.map(w => w.name).join(', ');
                     throw new Error(`未找到"4-手动任务"工作流。可用工作流: ${availableWorkflows}`);
                 }
-                
                 const workflowId = mainWorkflow.id;
-                
                 // 2. 触发工作流
                 const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${workflowId}/dispatches`;
                 const dispatchResponse = await fetch(dispatchUrl, {
@@ -1175,7 +1105,6 @@
                         inputs: { task: taskType }
                     })
                 });
-                
                 if (dispatchResponse.status === 204) {
                     if (statusDiv) {
                         statusDiv.textContent = '✅ 触发成功！请等待1-2分钟查看结果';
@@ -1185,7 +1114,6 @@
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
                 }
-                
             } catch (error) {
                 console.error('触发错误:', error);
                 if (statusDiv) {
@@ -1194,7 +1122,6 @@
                 }
             }
         }
-
         // 页面加载时检查保存的配置
         document.addEventListener('DOMContentLoaded', function() {
             const savedConfig = localStorage.getItem('multi_project_config');
@@ -1205,13 +1132,11 @@
                 document.getElementById('repo-karmy').value = config.repoKarmy || 'fish-etf';
                 document.getElementById('repo-stock').value = config.repoStock || 'stock-analyse';
                 document.getElementById('pat').value = config.pat || '';
-                
                 // 显示配置已加载
                 const statusDiv = document.getElementById('config-status');
                 statusDiv.textContent = '✓ 已载保存的配置';
                 statusDiv.className = 'status info';
                 statusDiv.style.display = 'block';
-                
                 setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
             }
         });

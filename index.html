@@ -528,7 +528,7 @@
         <div class="task">
             <h3>【新股】手动推送测试</h3>
             <p>向微信推送测试消息，验证消息通道是否正常</p>
-            <button id="btn-new-stock-test" onclick="triggerNewStockTask('test_push')">
+            <button id="btn-new-stock-test" onclick="triggerNewStockTask('test_push', 'new-stock-status')">
                 <span class="btn-icon">📤</span> 触发测试
             </button>
             <div id="new-stock-status" class="status" style="display: none;"></div>
@@ -536,7 +536,7 @@
         <div class="task">
             <h3>【ETF】手动推送当前ETF池</h3>
             <p>推送当前有效的ETF股票池到微信</p>
-            <button id="btn-etf-pool" onclick="triggerTask('karmy')">
+            <button id="btn-etf-pool" onclick="triggerTask('karmy', 'karmy-status')">
                 <span class="btn-icon">📊</span> 触发推送
             </button>
             <div id="karmy-status" class="status" style="display: none;"></div>
@@ -546,85 +546,98 @@
             <h2 style="font-size: 16px; margin-top: 0;">⚙️ 手动任务</h2>
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-newstock" onclick="triggerNewStockTask('test_push')">
+                    <button id="btn-manual-newstock" onclick="triggerNewStockTask('test_push', 'manual-newstock-status')">
                         <span class="btn-icon">📤</span> 手动推送今天新股
                     </button>
+                    <div id="manual-newstock-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-etf-pool" onclick="triggerTask('karmy')">
+                    <button id="btn-manual-etf-pool" onclick="triggerTask('karmy', 'manual-etf-pool-status')">
                         <span class="btn-icon">📊</span> 手动推送当前ETF池
                     </button>
+                    <div id="manual-etf-pool-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-arbitrage" onclick="triggerManualTask('calculate_arbitrage')">
+                    <button id="btn-manual-arbitrage" onclick="triggerManualTask('calculate_arbitrage', 'manual-arbitrage-status')">
                         <span class="btn-icon">🔍</span> 立即计算ETF套利
                     </button>
+                    <div id="manual-arbitrage-status" class="status" style="display: none;"></div>
                 </div>
             </div>
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-index-yesno" onclick="triggerManualTask('index_yesno')">
+                    <button id="btn-manual-index-yesno" onclick="triggerManualTask('index_yesno', 'manual-index-yesno-status')">
                         <span class="btn-icon">📈</span> 指数涨跌判断
                     </button>
+                    <div id="manual-index-yesno-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-update-stock-list" onclick="triggerManualTask('update_stock_list')">
+                    <button id="btn-manual-update-stock-list" onclick="triggerManualTask('update_stock_list', 'manual-update-stock-list-status')">
                         <span class="btn-icon">🔄</span> 更新股票列表
                     </button>
+                    <div id="manual-update-stock-list-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-stock-filter" onclick="triggerManualTask('stock_ListFilt')">
+                    <button id="btn-manual-stock-filter" onclick="triggerManualTask('stock_ListFilt', 'manual-stock-filter-status')">
                         <span class="btn-icon">🧹</span> 财务过滤股票列表
                     </button>
+                    <div id="manual-stock-filter-status" class="status" style="display: none;"></div>
                 </div>
             </div>
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten')">
+                    <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten', 'manual-stock-tickten-status')">
                         <span class="btn-icon">⏱️</span> 股票十档行情
                     </button>
+                    <div id="manual-stock-tickten-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-crawl-stock" onclick="triggerManualTask('crawl_stock_daily')">
+                    <button id="btn-manual-crawl-stock" onclick="triggerManualTask('crawl_stock_daily', 'manual-crawl-stock-status')">
                         <span class="btn-icon">📥</span> 爬取股票日线数据
                     </button>
+                    <div id="manual-crawl-stock-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-stock-threema" onclick="triggerManualTask('stock_threema')">
+                    <button id="btn-manual-stock-threema" onclick="triggerManualTask('stock_threema', 'manual-stock-threema-status')">
                         <span class="btn-icon">📊</span> MACD均线策略
                     </button>
+                    <div id="manual-stock-threema-status" class="status" style="display: none;"></div>
                 </div>
             </div>
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-stock-backtest" onclick="triggerManualTask('stock_backtest')">
+                    <button id="btn-manual-stock-backtest" onclick="triggerManualTask('stock_backtest', 'manual-stock-backtest-status')">
                         <span class="btn-icon">🔙</span> 股票均线缠绕回测
                     </button>
+                    <div id="manual-stock-backtest-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-analyze-stock" onclick="triggerManualTask('analyze_stock')">
+                    <button id="btn-manual-analyze-stock" onclick="triggerManualTask('analyze_stock', 'manual-analyze-stock-status')">
                         <span class="btn-icon">📈</span> 个股技术分析
                     </button>
+                    <div id="manual-analyze-stock-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-update-etf-list" onclick="triggerManualTask('update_etf_list')">
+                    <button id="btn-manual-update-etf-list" onclick="triggerManualTask('update_etf_list', 'manual-update-etf-list-status')">
                         <span class="btn-icon">🔄</span> 更新ETF列表
                     </button>
+                    <div id="manual-update-etf-list-status" class="status" style="display: none;"></div>
                 </div>
             </div>
             <div class="task-row">
                 <div class="task-button">
-                    <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily')">
+                    <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily', 'manual-crawl-etf-status')">
                         <span class="btn-icon">📥</span> 爬取ETF日线数据
                     </button>
+                    <div id="manual-crawl-etf-status" class="status" style="display: none;"></div>
                 </div>
                 <div class="task-button">
-                    <button id="btn-manual-calculate-position" onclick="triggerManualTask('calculate_position')">
+                    <button id="btn-manual-calculate-position" onclick="triggerManualTask('calculate_position', 'manual-calculate-position-status')">
                         <span class="btn-icon">📊</span> 计算ETF仓位
                     </button>
+                    <div id="manual-calculate-position-status" class="status" style="display: none;"></div>
                 </div>
             </div>
-            <div id="manual-task-status" class="status" style="display: none;"></div>
         </div>
         <div class="legacy-tasks">
             <h2 style="font-size: 16px; margin-top: 0;">其他功能（仅保留）</h2>
@@ -753,16 +766,21 @@
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }
 
-        // 更新任务状态显示
-        function updateStatus(task, status, className, message) {
-            const statusDiv = document.getElementById(`${task}-status`);
+        // 更新任务状态显示 - 修改了此函数，使其接收状态区域ID
+        function updateStatus(statusDivId, status, className, message) {
+            const statusDiv = document.getElementById(statusDivId);
+            if (!statusDiv) {
+                console.error(`Status div with ID ${statusDivId} not found`);
+                return;
+            }
+            
             statusDiv.textContent = message;
             statusDiv.className = `status ${className}`;
             statusDiv.style.display = 'block';
         }
 
         // 触发任务（ETF策略）
-        async function triggerTask(taskType) {
+        async function triggerTask(taskType, statusDivId = 'karmy-status') {
             // 检查是否在冷却期内
             if (isButtonDisabled()) {
                 alert('操作过于频繁，请等待1分钟后再试');
@@ -802,8 +820,8 @@
                 return;
             }
             
-            // 更新状态
-            updateStatus('karmy', 'loading', 'loading', '正在触发任务...');
+            // 更新状态 - 使用传入的statusDivId
+            updateStatus(statusDivId, 'loading', 'loading', '正在触发任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -849,7 +867,7 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    updateStatus('karmy', 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
+                    updateStatus(statusDivId, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -857,12 +875,12 @@
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus('karmy', 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus(statusDivId, 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
         
         // 触发新股推送任务
-        async function triggerNewStockTask(taskType) {
+        async function triggerNewStockTask(taskType, statusDivId = 'new-stock-status') {
             // 检查是否在冷却期内
             if (isButtonDisabled()) {
                 alert('操作过于频繁，请等待1分钟后再试');
@@ -894,8 +912,8 @@
                 return;
             }
             
-            // 更新状态
-            updateStatus('new-stock', 'loading', 'loading', '正在触发新股推送任务...');
+            // 更新状态 - 使用传入的statusDivId
+            updateStatus(statusDivId, 'loading', 'loading', '正在触发新股推送任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -941,7 +959,7 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    updateStatus('new-stock', 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信消息');
+                    updateStatus(statusDivId, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看微信消息');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -949,7 +967,7 @@
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus('new-stock', 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus(statusDivId, 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
         
@@ -997,8 +1015,8 @@
                 document.getElementById('stock_code').value = stockCode;
             }
             
-            // 更新状态
-            updateStatus('stock', 'loading', 'loading', '正在触发技术分析任务...');
+            // 更新状态 - 使用固定的stock-status
+            updateStatus('stock-status', 'loading', 'loading', '正在触发技术分析任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -1049,7 +1067,7 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    updateStatus('stock', 'success', 'success', '✅ 触发成功！请等待2-3分钟查看微信消息');
+                    updateStatus('stock-status', 'success', 'success', '✅ 触发成功！请等待2-3分钟查看微信消息');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -1057,12 +1075,12 @@
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus('stock', 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus('stock-status', 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
         
         // 新增：触发手动任务
-        async function triggerManualTask(taskType) {
+        async function triggerManualTask(taskType, statusDivId = 'manual-task-status') {
             // 检查是否在冷却期内
             if (isButtonDisabled()) {
                 alert('操作过于频繁，请等待1分钟后再试');
@@ -1094,11 +1112,13 @@
                 return;
             }
             
-            // 更新状态
-            const statusDiv = document.getElementById('manual-task-status');
-            statusDiv.textContent = '正在触发任务...';
-            statusDiv.className = 'status loading';
-            statusDiv.style.display = 'block';
+            // 更新状态 - 使用传入的statusDivId
+            const statusDiv = document.getElementById(statusDivId);
+            if (statusDiv) {
+                statusDiv.textContent = '正在触发任务...';
+                statusDiv.className = 'status loading';
+                statusDiv.style.display = 'block';
+            }
             
             try {
                 // 1. 获取工作流ID
@@ -1146,8 +1166,10 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    statusDiv.textContent = '✅ 触发成功！请等待1-2分钟查看结果';
-                    statusDiv.className = 'status success';
+                    if (statusDiv) {
+                        statusDiv.textContent = '✅ 触发成功！请等待1-2分钟查看结果';
+                        statusDiv.className = 'status success';
+                    }
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -1155,8 +1177,10 @@
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                statusDiv.textContent = `❌ 错误: ${error.message}`;
-                statusDiv.className = 'status error';
+                if (statusDiv) {
+                    statusDiv.textContent = `❌ 错误: ${error.message}`;
+                    statusDiv.className = 'status error';
+                }
             }
         }
 

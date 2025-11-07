@@ -486,7 +486,7 @@
                 </div>
                 
                 <div class="input-group config-item config-button">
-                    <button onclick="saveConfig()">💾 保存配置</button>
+                    <button id="btn-save-config" onclick="saveConfig()">💾 保存配置</button>
                 </div>
             </div>
             
@@ -515,13 +515,13 @@
                 
                 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                     <div style="flex: 1; min-width: 150px;">
-                        <button onclick="triggerStockAnalysisViaWechat()">
+                        <button id="btn-stock-wechat" onclick="triggerStockAnalysisViaWechat()">
                             <span class="btn-icon">📱</span> 结果推送微信
                         </button>
                     </div>
                     
                     <div style="flex: 1; min-width: 150px;">
-                        <button disabled>
+                        <button id="btn-stock-email" disabled>
                             <span class="btn-icon">📧</span> 结果发送邮件
                         </button>
                     </div>
@@ -534,7 +534,7 @@
         <div class="task">
             <h3>【新股】手动推送测试</h3>
             <p>向微信推送测试消息，验证消息通道是否正常</p>
-            <button onclick="triggerNewStockTask('test_push')">
+            <button id="btn-new-stock-test" onclick="triggerNewStockTask('test_push')">
                 <span class="btn-icon">📤</span> 触发测试
             </button>
             <div id="new-stock-status" class="status" style="display: none;"></div>
@@ -543,7 +543,7 @@
         <div class="task">
             <h3>【ETF】手动推送当前ETF池</h3>
             <p>推送当前有效的ETF股票池到微信</p>
-            <button onclick="triggerTask('karmy')">
+            <button id="btn-etf-pool" onclick="triggerTask('karmy')">
                 <span class="btn-icon">📊</span> 触发推送
             </button>
             <div id="karmy-status" class="status" style="display: none;"></div>
@@ -555,17 +555,17 @@
             
             <div class="task-row">
                 <div class="task-button">
-                    <button onclick="triggerNewStockTask('test_push')">
+                    <button id="btn-manual-newstock" onclick="triggerNewStockTask('test_push')">
                         <span class="btn-icon">📤</span> 手动推送今天新股
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerTask('karmy')">
+                    <button id="btn-manual-etf-pool" onclick="triggerTask('karmy')">
                         <span class="btn-icon">📊</span> 手动推送当前ETF池
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('calculate_arbitrage')">
+                    <button id="btn-manual-arbitrage" onclick="triggerManualTask('calculate_arbitrage')">
                         <span class="btn-icon">🔍</span> 立即计算ETF套利
                     </button>
                 </div>
@@ -573,17 +573,17 @@
             
             <div class="task-row">
                 <div class="task-button">
-                    <button onclick="triggerManualTask('index_yesno')">
+                    <button id="btn-manual-index-yesno" onclick="triggerManualTask('index_yesno')">
                         <span class="btn-icon">📈</span> 指数涨跌判断
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('update_stock_list')">
+                    <button id="btn-manual-update-stock-list" onclick="triggerManualTask('update_stock_list')">
                         <span class="btn-icon">🔄</span> 更新股票列表
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('stock_ListFilt')">
+                    <button id="btn-manual-stock-filter" onclick="triggerManualTask('stock_ListFilt')">
                         <span class="btn-icon">🧹</span> 财务过滤股票列表
                     </button>
                 </div>
@@ -591,17 +591,17 @@
             
             <div class="task-row">
                 <div class="task-button">
-                    <button onclick="triggerManualTask('stock_tickten')">
+                    <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten')">
                         <span class="btn-icon">⏱️</span> 股票十档行情
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('crawl_stock_daily')">
+                    <button id="btn-manual-crawl-stock" onclick="triggerManualTask('crawl_stock_daily')">
                         <span class="btn-icon">📥</span> 爬取股票日线数据
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('stock_threema')">
+                    <button id="btn-manual-stock-threema" onclick="triggerManualTask('stock_threema')">
                         <span class="btn-icon">📊</span> MACD均线策略
                     </button>
                 </div>
@@ -609,17 +609,17 @@
             
             <div class="task-row">
                 <div class="task-button">
-                    <button onclick="triggerManualTask('stock_backtest')">
+                    <button id="btn-manual-stock-backtest" onclick="triggerManualTask('stock_backtest')">
                         <span class="btn-icon">🔙</span> 股票均线缠绕回测
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('analyze_stock')">
+                    <button id="btn-manual-analyze-stock" onclick="triggerManualTask('analyze_stock')">
                         <span class="btn-icon">📈</span> 个股技术分析
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('update_etf_list')">
+                    <button id="btn-manual-update-etf-list" onclick="triggerManualTask('update_etf_list')">
                         <span class="btn-icon">🔄</span> 更新ETF列表
                     </button>
                 </div>
@@ -627,12 +627,12 @@
             
             <div class="task-row">
                 <div class="task-button">
-                    <button onclick="triggerManualTask('crawl_etf_daily')">
+                    <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily')">
                         <span class="btn-icon">📥</span> 爬取ETF日线数据
                     </button>
                 </div>
                 <div class="task-button">
-                    <button onclick="triggerManualTask('calculate_position')">
+                    <button id="btn-manual-calculate-position" onclick="triggerManualTask('calculate_position')">
                         <span class="btn-icon">📊</span> 计算ETF仓位
                     </button>
                 </div>
@@ -778,7 +778,7 @@
             }
             
             // 更新状态
-            updateStatus(taskType, 'loading', 'loading', '正在触发任务...');
+            updateStatus('karmy', 'loading', 'loading', '正在触发任务...');
             
             try {
                 // 1. 获取工作流ID
@@ -824,7 +824,7 @@
                 });
                 
                 if (dispatchResponse.status === 204) {
-                    updateStatus(taskType, 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
+                    updateStatus('karmy', 'success', 'success', '✅ 触发成功！请等待1-2分钟查看结果');
                 } else {
                     const errorText = await dispatchResponse.text();
                     throw new Error(`触发失败: ${dispatchResponse.status} - ${errorText}`);
@@ -832,7 +832,7 @@
                 
             } catch (error) {
                 console.error('触发错误:', error);
-                updateStatus(taskType, 'error', 'error', `❌ 错误: ${error.message}`);
+                updateStatus('karmy', 'error', 'error', `❌ 错误: ${error.message}`);
             }
         }
         

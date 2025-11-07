@@ -96,6 +96,17 @@
             transform: none; 
             box-shadow: none; 
         }
+        /* 新增的禁用状态样式 */
+        button:disabled:not(.btn-disabled-permanent) {
+            opacity: 0.7;
+            cursor: wait;
+            animation: button-disabled 2s forwards;
+        }
+        @keyframes button-disabled {
+            0% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.7; }
+        }
         button .icon { 
             margin-right: 8px; 
             font-size: 16px; 
@@ -339,7 +350,6 @@
             margin: 0;
             border: 1px solid transparent;
         }
-
         /* 手动任务模块样式 */
         .manual-tasks {
             margin-top: 25px;
@@ -449,88 +459,72 @@
 </head>
 <body>
     <h1>🚀 多项目触发器</h1>
-    
     <div class="container">
         <div class="config-section">
             <div class="config-container">
                 <div class="config-label">📝 配置信息</div>
-                
                 <div class="input-group config-item">
                     <label for="owner">GitHub用户名：</label>
                     <input type="text" id="owner" placeholder="例如：yourusername" />
                     <div class="help-text">这是你登录GitHub的用户名</div>
                 </div>
-                
                 <div class="input-group config-item">
                     <label for="pat">安全密钥 (PAT)：</label>
                     <input type="password" id="pat" placeholder="GitHub个人访问令牌" />
                     <div class="help-text">从GitHub获取的个人访问令牌</div>
                 </div>
-                
                 <div class="input-group config-item">
                     <label for="repo-karmy">ETF策略仓库：</label>
                     <input type="text" id="repo-karmy" value="fish-etf" />
                     <div class="help-text">例如：fish-etf</div>
                 </div>
-                
                 <div class="input-group config-item">
                     <label for="repo-stock">股票分析仓库：</label>
                     <input type="text" id="repo-stock" value="stock-analyse" />
                     <div class="help-text">例如：stock-analyse</div>
                 </div>
-                
                 <div class="input-group config-item">
                     <label for="repo-push">新股推送仓库：</label>
                     <input type="text" id="repo-push" value="push-new-stock-everyday" />
                     <div class="help-text">例如：push-new-stock-everyday</div>
                 </div>
-                
                 <div class="input-group config-item config-button">
                     <button id="btn-save-config" onclick="saveConfig()">💾 保存配置</button>
                 </div>
             </div>
-            
             <div id="config-status" class="status" style="display: none;"></div>
         </div>
-
         <h2 style="font-size: 16px; margin-top: 0;">🚀 任务执行</h2>
-        
         <!-- 股票分析部分现在是第一个任务 -->
         <div class="task">
             <h3>【股票】技术分析</h3>
             <p>对指定股票进行详细技术分析，结果将通过微信推送</p>
-            
             <div class="stock-analysis-section">
                 <div class="input-group">
                     <label for="stock_code">股票代码：</label>
                     <input type="text" id="stock_code" placeholder="例如：002511" value="002511" />
                     <div class="help-text">输入6位股票代码（如000001），填000000表示测试</div>
                 </div>
-                
                 <div class="input-group">
                     <label for="recipient_email">接收邮箱：</label>
                     <input type="email" id="recipient_email" placeholder="angel49946491@qq.com" disabled />
                     <div class="help-text">接收分析报告的邮箱地址（当前功能不可用，未来可恢复）</div>
                 </div>
-                
                 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                     <div style="flex: 1; min-width: 150px;">
                         <button id="btn-stock-wechat" onclick="triggerStockAnalysisViaWechat()">
                             <span class="btn-icon">📱</span> 结果推送微信
                         </button>
                     </div>
-                    
                     <div style="flex: 1; min-width: 150px;">
                         <button id="btn-stock-email" disabled>
                             <span class="btn-icon">📧</span> 结果发送邮件
                         </button>
                     </div>
                 </div>
-                
                 <div id="stock-status" class="status" style="display: none;"></div>
             </div>
         </div>
-        
         <div class="task">
             <h3>【新股】手动推送测试</h3>
             <p>向微信推送测试消息，验证消息通道是否正常</p>
@@ -539,7 +533,6 @@
             </button>
             <div id="new-stock-status" class="status" style="display: none;"></div>
         </div>
-        
         <div class="task">
             <h3>【ETF】手动推送当前ETF池</h3>
             <p>推送当前有效的ETF股票池到微信</p>
@@ -548,11 +541,9 @@
             </button>
             <div id="karmy-status" class="status" style="display: none;"></div>
         </div>
-        
         <!-- 新增手动任务模块 -->
         <div class="manual-tasks">
             <h2 style="font-size: 16px; margin-top: 0;">⚙️ 手动任务</h2>
-            
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-newstock" onclick="triggerNewStockTask('test_push')">
@@ -570,7 +561,6 @@
                     </button>
                 </div>
             </div>
-            
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-index-yesno" onclick="triggerManualTask('index_yesno')">
@@ -588,7 +578,6 @@
                     </button>
                 </div>
             </div>
-            
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-stock-tickten" onclick="triggerManualTask('stock_tickten')">
@@ -606,7 +595,6 @@
                     </button>
                 </div>
             </div>
-            
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-stock-backtest" onclick="triggerManualTask('stock_backtest')">
@@ -624,7 +612,6 @@
                     </button>
                 </div>
             </div>
-            
             <div class="task-row">
                 <div class="task-button">
                     <button id="btn-manual-crawl-etf" onclick="triggerManualTask('crawl_etf_daily')">
@@ -637,13 +624,10 @@
                     </button>
                 </div>
             </div>
-            
             <div id="manual-task-status" class="status" style="display: none;"></div>
         </div>
-        
         <div class="legacy-tasks">
             <h2 style="font-size: 16px; margin-top: 0;">其他功能（仅保留）</h2>
-            
             <div class="legacy-task-row">
                 <div class="legacy-task-button">
                     <button disabled>
@@ -658,7 +642,6 @@
                     <div class="status info" style="margin-top: 8px;">此功能已迁移至对应项目</div>
                 </div>
             </div>
-            
             <div class="legacy-task-row">
                 <div class="legacy-task-button">
                     <button disabled>
@@ -674,7 +657,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="instructions">
             <h3>使用说明</h3>
             <ol>
@@ -701,13 +683,42 @@
             </ol>
         </div>
     </div>
-    
     <footer>
         🚀 多项目触发器 | 统一管理多个量化项目 | GitHub部署方案<br>
         安全提示：密钥仅保存在你的浏览器中，不会发送到任何服务器
     </footer>
-
     <script>
+        // 全局变量
+        let lastClickTime = 0;
+        const CLICK_COOLDOWN = 60000; // 1分钟
+        const BUTTON_DISABLE_TIME = 2000; // 2秒
+        
+        // 检查是否在冷却期内
+        function isButtonDisabled() {
+            const now = Date.now();
+            return (now - lastClickTime) < CLICK_COOLDOWN;
+        }
+        
+        // 更新上次点击时间
+        function updateLastClickTime() {
+            lastClickTime = Date.now();
+        }
+        
+        // 禁用按钮并添加临时效果
+        function disableButton(button, disableTime = BUTTON_DISABLE_TIME) {
+            button.disabled = true;
+            // 添加禁用样式
+            button.style.opacity = '0.7';
+            button.style.cursor = 'wait';
+            
+            // 2秒后恢复
+            setTimeout(() => {
+                button.disabled = false;
+                button.style.opacity = '';
+                button.style.cursor = 'pointer';
+            }, disableTime);
+        }
+        
         // 保存配置到本地存储
         function saveConfig() {
             const owner = document.getElementById('owner').value.trim();
@@ -752,7 +763,21 @@
 
         // 触发任务（ETF策略）
         async function triggerTask(taskType) {
-            // 检查配置是否已保存
+            // 检查是否在冷却期内
+            if (isButtonDisabled()) {
+                alert('操作过于频繁，请等待1分钟后再试');
+                return;
+            }
+            
+            // 禁用所有按钮
+            document.querySelectorAll('button:not([disabled])').forEach(btn => {
+                disableButton(btn);
+            });
+            
+            // 更新点击时间
+            updateLastClickTime();
+            
+            // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
@@ -838,7 +863,21 @@
         
         // 触发新股推送任务
         async function triggerNewStockTask(taskType) {
-            // 检查配置是否已保存
+            // 检查是否在冷却期内
+            if (isButtonDisabled()) {
+                alert('操作过于频繁，请等待1分钟后再试');
+                return;
+            }
+            
+            // 禁用所有按钮
+            document.querySelectorAll('button:not([disabled])').forEach(btn => {
+                disableButton(btn);
+            });
+            
+            // 更新点击时间
+            updateLastClickTime();
+            
+            // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
@@ -916,7 +955,21 @@
         
         // 触发股票分析任务（微信推送）
         async function triggerStockAnalysisViaWechat() {
-            // 检查配置是否已保存
+            // 检查是否在冷却期内
+            if (isButtonDisabled()) {
+                alert('操作过于频繁，请等待1分钟后再试');
+                return;
+            }
+            
+            // 禁用所有按钮
+            document.querySelectorAll('button:not([disabled])').forEach(btn => {
+                disableButton(btn);
+            });
+            
+            // 更新点击时间
+            updateLastClickTime();
+            
+            // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');
@@ -1010,7 +1063,21 @@
         
         // 新增：触发手动任务
         async function triggerManualTask(taskType) {
-            // 检查配置是否已保存
+            // 检查是否在冷却期内
+            if (isButtonDisabled()) {
+                alert('操作过于频繁，请等待1分钟后再试');
+                return;
+            }
+            
+            // 禁用所有按钮
+            document.querySelectorAll('button:not([disabled])').forEach(btn => {
+                disableButton(btn);
+            });
+            
+            // 更新点击时间
+            updateLastClickTime();
+            
+            // 原有逻辑
             const savedConfig = localStorage.getItem('multi_project_config');
             if (!savedConfig) {
                 alert('请先填写并保存配置信息！');

@@ -786,6 +786,10 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
+            // 先隐藏所有状态区域
+            document.querySelectorAll('.status').forEach(statusDiv => {
+                statusDiv.style.display = 'none';
+            });
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
@@ -869,6 +873,10 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
+            // 先隐藏所有状态区域
+            document.querySelectorAll('.status').forEach(statusDiv => {
+                statusDiv.style.display = 'none';
+            });
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
@@ -945,6 +953,10 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
+            // 先隐藏所有状态区域
+            document.querySelectorAll('.status').forEach(statusDiv => {
+                statusDiv.style.display = 'none';
+            });
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
@@ -1035,6 +1047,10 @@
                 alert('操作过于频繁，请等待1分钟后再试');
                 return;
             }
+            // 先隐藏所有状态区域
+            document.querySelectorAll('.status').forEach(statusDiv => {
+                statusDiv.style.display = 'none';
+            });
             // 禁用所有按钮
             document.querySelectorAll('button:not([disabled])').forEach(btn => {
                 disableButton(btn);
